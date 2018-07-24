@@ -1,6 +1,7 @@
 package web.dto;
 
 import lombok.*;
+
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -9,22 +10,20 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Employee {
-    @NonNull
-    private long id;
+public class CreateEmployeeRequest {
     @NonNull
     private String name;
     @NonNull
     private String surname;
     private String patronimyc;
     @NonNull
-    private Gender gender;
+    private String genderName;
     @NonNull
     private Date birthDate;
     @NonNull
-    private Department department;
+    private String departmentName;
     @NonNull
-    private Position position;
+    private String positionName;
     @NonNull
     private int grade;
     @NonNull

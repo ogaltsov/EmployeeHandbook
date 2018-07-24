@@ -8,7 +8,6 @@ import java.util.Date;
 @NoArgsConstructor
 @Builder
 public class Certificate {
-    @NonNull
     private long id;
     @NonNull
     private Date date;

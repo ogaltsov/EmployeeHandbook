@@ -10,8 +10,12 @@ import service.DepartmentService;
 @RestController
 public class DepartmentController {
 
-    @Autowired
     private DepartmentService departmentService;
+
+    @Autowired
+    public DepartmentController(DepartmentService departmentService){
+        this.departmentService = departmentService;
+    }
 
     @RequestMapping(value = "/closeDepartment", method = RequestMethod.DELETE)
     public String closeDepartment(@RequestParam(value = "id") long id) {  //if have no param -> exception

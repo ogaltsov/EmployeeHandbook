@@ -4,32 +4,36 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import service.DepartmentService;
+import service.EmployeeService;
 import service.EmployeeServiceImpl;
 import web.dto.ChangeEmployeeRequest;
-import web.dto.Employee;
+import web.dto.CreateEmployeeRequest;
+import web.dto.TransferEmployeeRequest;
 
 @RestController
 public class EmployeeController {
 
+    private EmployeeService employeeService;
+
     @Autowired
-    private EmployeeServiceImpl employeeService;
+    public EmployeeController(EmployeeService employeeService){
+        this.employeeService = employeeService;
+    }
 
     @RequestMapping(value = "/addEmployee", method = RequestMethod.POST)
-    public String createEmployee(@RequestBody Employee employee){  //на каком этапе выпадет exeption с null полем при создании объекта
-        String answer = employeeService.addEmployee(employee);
+    public String createEmployee(@RequestBody CreateEmployeeRequest createEmployeeRequest){
+        String answer = employeeService.addEmployee(createEmployeeRequest);
         return answer;
     }
 
-    @RequestMapping(value = "/transferEmployee", method = RequestMethod.PUT) ///todo: replace with TransferEmployeeRequest
-    public String transferEmployee(@RequestParam(value = "employeeId") long employeeId,
-                                   @RequestParam(value = "depIdFrom") long depIdFrom,
-                                   @RequestParam(value = "depIdTo") long depIdTo) {   //exception by: required=true, parseLong
-        String answer = employeeService.transferEmployee(employeeId, depIdFrom, depIdTo);
+    @RequestMapping(value = "/transferEmployee", method = RequestMethod.PUT)
+    public String transferEmployee(@RequestBody TransferEmployeeRequest transferEmployeeRequest) {
+        String answer = employeeService.transferEmployee(transferEmployeeRequest);
         return answer;
     }
 
     @RequestMapping(value = "/changeEmployee", method = RequestMethod.PUT)
-    public String changeEmployee(@RequestBody ChangeEmployeeRequest changeEmployeeRequest){  //exc
+    public String changeEmployee(@RequestBody ChangeEmployeeRequest changeEmployeeRequest){
         if(changeEmployeeRequest.isCorrect()){
             String answer = employeeService.changeEmployee(changeEmployeeRequest);
             return answer;
@@ -38,8 +42,8 @@ public class EmployeeController {
     }
 
     @RequestMapping(value = "/removeEmployee", method = RequestMethod.DELETE)
-    public String removeEmployee(@RequestParam(value = "id") long id){   //exc
-        String answer = employeeService.remove(id);
+    public String removeEmployee(@RequestParam(value = "id") long id){
+        String answer = employeeService.removeEmployee(id);
         return answer;
     }
 }
