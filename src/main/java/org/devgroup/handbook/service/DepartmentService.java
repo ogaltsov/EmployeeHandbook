@@ -1,4 +1,4 @@
-package service;
+package org.devgroup.handbook.service;
 
 public interface DepartmentService {
 

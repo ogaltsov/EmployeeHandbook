@@ -1,6 +1,6 @@
-package service;
+package org.devgroup.handbook.service;
 
-import dao.DepartmentDao;
+import org.devgroup.handbook.dao.DepartmentDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +15,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     public String closeDepartment(long id){
-        return "null";  //todo: return answer from dao
+        return "null";  //todo: return answer from org.devgroup.handbook.dao
     }
 
 

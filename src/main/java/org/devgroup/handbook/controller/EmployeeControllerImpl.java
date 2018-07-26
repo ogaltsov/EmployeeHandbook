@@ -1,12 +1,12 @@
-package web.controller;
+package org.devgroup.handbook.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import service.EmployeeService;
-import web.dto.ChangeEmployeeRequest;
-import web.dto.CreateEmployeeRequest;
-import web.dto.Response;
-import web.dto.TransferEmployeeRequest;
+import org.devgroup.handbook.service.EmployeeService;
+import org.devgroup.handbook.dto.ChangeEmployeeRequest;
+import org.devgroup.handbook.dto.CreateEmployeeRequest;
+import org.devgroup.handbook.dto.Response;
+import org.devgroup.handbook.dto.TransferEmployeeRequest;
 
 @RestController
 public class EmployeeControllerImpl implements EmployeeController{
@@ -36,7 +36,7 @@ public class EmployeeControllerImpl implements EmployeeController{
             String answer = employeeService.changeEmployee(changeEmployeeRequest);
             return new Response(answer);
         }
-        return new Response("incorrect response"); 
+        return new Response("incorrect response");
     }
 
     @RequestMapping(value = "/removeEmployee", method = RequestMethod.DELETE)

@@ -1,4 +1,4 @@
-package web.dto;
+package org.devgroup.handbook.dto;
 
 import lombok.*;
 import java.util.Date;

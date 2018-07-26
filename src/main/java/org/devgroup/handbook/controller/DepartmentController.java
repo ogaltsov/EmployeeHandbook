@@ -1,6 +1,6 @@
-package web.controller;
+package org.devgroup.handbook.controller;
 
-import web.dto.Response;
+import org.devgroup.handbook.dto.Response;
 
 public interface DepartmentController {
 

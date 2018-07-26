@@ -1,8 +1,8 @@
-package service;
+package org.devgroup.handbook.service;
 
-import web.dto.ChangeEmployeeRequest;
-import web.dto.CreateEmployeeRequest;
-import web.dto.TransferEmployeeRequest;
+import org.devgroup.handbook.dto.ChangeEmployeeRequest;
+import org.devgroup.handbook.dto.CreateEmployeeRequest;
+import org.devgroup.handbook.dto.TransferEmployeeRequest;
 
 public interface EmployeeService {
 

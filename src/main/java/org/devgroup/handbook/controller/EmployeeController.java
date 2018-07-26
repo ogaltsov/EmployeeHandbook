@@ -1,9 +1,9 @@
-package web.controller;
+package org.devgroup.handbook.controller;
 
-import web.dto.ChangeEmployeeRequest;
-import web.dto.CreateEmployeeRequest;
-import web.dto.Response;
-import web.dto.TransferEmployeeRequest;
+import org.devgroup.handbook.dto.ChangeEmployeeRequest;
+import org.devgroup.handbook.dto.CreateEmployeeRequest;
+import org.devgroup.handbook.dto.Response;
+import org.devgroup.handbook.dto.TransferEmployeeRequest;
 
 public interface EmployeeController {
     Response createEmployee(CreateEmployeeRequest createEmployeeRequest);
