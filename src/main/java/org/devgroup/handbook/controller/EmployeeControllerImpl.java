@@ -21,7 +21,7 @@ public class EmployeeControllerImpl implements EmployeeController{
     @RequestMapping(value = "/addEmployee", method = RequestMethod.POST)
     public Response createEmployee(@RequestBody CreateEmployeeRequest createEmployeeRequest){
         String answer = employeeService.createEmployee(createEmployeeRequest);
-        return new Response(answer);
+        return new Response(answer);   //required: id or message
     }
 
     @RequestMapping(value = "/transferEmployee", method = RequestMethod.PUT)
