@@ -18,7 +18,7 @@ public class Employee {
     private String surname;
     private String patronimyc;
     @NonNull
-    private Gender gender;
+    private String gender;
     @NonNull
     private Date birthDate;
     @NonNull
