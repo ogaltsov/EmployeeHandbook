@@ -29,9 +29,7 @@ public class DepartmentEntity {
     @JoinColumn(name = "headEmployee",referencedColumnName = "id")
     private EmployeeEntity headEmployee;
 
-    @ManyToOne(
-            fetch = FetchType.EAGER
-    )
-    @JoinColumn(name = "parent_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "parent_department")
     private DepartmentEntity parentDepartment;
 }
