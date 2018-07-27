@@ -12,7 +12,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @NoArgsConstructor
-public abstract class Dao<E,K extends Serializable> {
+public abstract class Dao<E, K extends Serializable> {
 
     private Session currentSession;
     private Transaction currentTransaction;
@@ -40,7 +40,7 @@ public abstract class Dao<E,K extends Serializable> {
     private static SessionFactory getSessionFactory() {
         Configuration configuration = new Configuration().configure();
         StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
-                                        .applySettings(configuration.getProperties());
+                .applySettings(configuration.getProperties());
         SessionFactory sessionFactory = configuration.buildSessionFactory(builder.build());
         return sessionFactory;
     }
@@ -63,9 +63,14 @@ public abstract class Dao<E,K extends Serializable> {
 
 
     abstract List<E> getAll();
+
     abstract E getEntityById(K id);
+
     abstract void update(E entity);
+
     abstract void delete(K id);
+
     abstract void create(E entity);
+
     abstract List<E> getWithCriteria(CriteriaQuery<E> criteriaQuery);
 }

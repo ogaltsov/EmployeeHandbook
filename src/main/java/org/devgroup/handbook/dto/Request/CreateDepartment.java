@@ -6,7 +6,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CreateDepartmentRequest {
+public class CreateDepartment {
 
     @NonNull
     private String name;

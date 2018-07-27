@@ -5,7 +5,7 @@ import org.devgroup.handbook.entity.DepartmentEntity;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 
-public class DepartmentDao extends Dao<DepartmentEntity,Long> {
+public class DepartmentDao extends Dao<DepartmentEntity, Long> {
 
     @Override
     public List<DepartmentEntity> getAll() {

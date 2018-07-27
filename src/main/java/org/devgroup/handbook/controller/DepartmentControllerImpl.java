@@ -1,7 +1,7 @@
 package org.devgroup.handbook.controller;
 
-import org.devgroup.handbook.dto.Request.CreateDepartmentRequest;
-import org.devgroup.handbook.dto.Request.ReassignmentRequest;
+import org.devgroup.handbook.dto.Request.CreateDepartment;
+import org.devgroup.handbook.dto.Request.Reassignment;
 import org.devgroup.handbook.exception.MyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -9,12 +9,12 @@ import org.devgroup.handbook.service.DepartmentService;
 import org.devgroup.handbook.dto.Response.Response;
 
 @RestController
-public class DepartmentControllerImpl implements DepartmentController{
+public class DepartmentControllerImpl implements DepartmentController {
 
     private DepartmentService departmentService;
 
     @Autowired
-    public DepartmentControllerImpl(DepartmentService departmentService){
+    public DepartmentControllerImpl(DepartmentService departmentService) {
         this.departmentService = departmentService;
     }
 
@@ -48,12 +48,12 @@ public class DepartmentControllerImpl implements DepartmentController{
     }
 
     @Override
-    public Response createDepartment(@RequestBody CreateDepartmentRequest createDepartmentRequest) {
+    public Response createDepartment(@RequestBody CreateDepartment createDepartmentRequest) {
         return null;
     }
 
     @RequestMapping(value = "/reassignmentDepartment", method = RequestMethod.PUT)
-    public Response reassignmentDepartment(@RequestBody ReassignmentRequest reassignmentRequest) {
+    public Response reassignmentDepartment(@RequestBody Reassignment reassignmentRequest) {
         try {
             String answer = departmentService.reassignmentDepartment(reassignmentRequest);
             return Response.builder()
@@ -65,7 +65,4 @@ public class DepartmentControllerImpl implements DepartmentController{
                     .build();
         }
     }
-
-    //todo: merge other methods from "DBaranov"
-
 }

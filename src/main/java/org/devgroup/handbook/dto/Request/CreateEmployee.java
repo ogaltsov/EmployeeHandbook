@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CreateEmployeeRequest {
+public class CreateEmployee {
     @NonNull
     private String name;
     @NonNull

@@ -6,7 +6,7 @@ import org.hibernate.Session;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 
-public class EmployeeDao extends Dao<EmployeeEntity,Long> {
+public class EmployeeDao extends Dao<EmployeeEntity, Long> {
 
     @Override
     public List<EmployeeEntity> getAll() {

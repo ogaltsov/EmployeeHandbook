@@ -1,7 +1,7 @@
 package org.devgroup.handbook.controller;
 
-import org.devgroup.handbook.dto.Request.CreateDepartmentRequest;
-import org.devgroup.handbook.dto.Request.ReassignmentRequest;
+import org.devgroup.handbook.dto.Request.CreateDepartment;
+import org.devgroup.handbook.dto.Request.Reassignment;
 import org.devgroup.handbook.dto.Response.Response;
 
 public interface DepartmentController {
@@ -10,8 +10,8 @@ public interface DepartmentController {
 
     Response searchListBranches(long id);
 
-    Response createDepartment(CreateDepartmentRequest createDepartmentRequest);
+    Response createDepartment(CreateDepartment createDepartmentRequest);
 
-    Response reassignmentDepartment(ReassignmentRequest reassignmentRequest);
+    Response reassignmentDepartment(Reassignment reassignmentRequest);
 
 }
