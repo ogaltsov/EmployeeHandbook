@@ -2,7 +2,7 @@ package org.devgroup.handbook.controller;
 
 import org.devgroup.handbook.dto.Request.CreateDepartmentRequest;
 import org.devgroup.handbook.dto.Request.ReassignmentRequest;
-import org.devgroup.handbook.errors.MyException;
+import org.devgroup.handbook.exception.MyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.devgroup.handbook.service.DepartmentService;

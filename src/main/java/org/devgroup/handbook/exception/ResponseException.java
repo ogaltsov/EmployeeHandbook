@@ -1,4 +1,4 @@
-package org.devgroup.handbook.errors;
+package org.devgroup.handbook.exception;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.*;
