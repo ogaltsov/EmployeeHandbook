@@ -22,7 +22,7 @@ public abstract class Dao<E, K extends Serializable> {
         return currentSession;
     }
 
-    public Session openCurrentSessionwithTransaction() {
+    public Session openCurrentSessionWithTransaction() {
         currentSession = getSessionFactory().openSession();
         currentTransaction = currentSession.beginTransaction();
         return currentSession;
@@ -32,7 +32,7 @@ public abstract class Dao<E, K extends Serializable> {
         currentSession.close();
     }
 
-    public void closeCurrentSessionwithTransaction() {
+    public void closeCurrentSessionWithTransaction() {
         currentTransaction.commit();
         currentSession.close();
     }
