@@ -1,8 +1,6 @@
 package org.devgroup.handbook.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -14,14 +12,14 @@ public class DepartmentEntity {
     @GeneratedValue
     private Long id;
 
-    @JsonIgnore
-    @Version
-    private Integer version = 0;
+//    @JsonIgnore
+//    @Version
+//    private Integer version = 0;
 
     @NotNull
     @Size(min = 3, max = 255)
     @Basic(optional = false)
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
     @NotNull

@@ -22,45 +22,45 @@ public class EmployeeEntity {
     @Column
     private long id;
 
-    @Column(name = "name")
     @NotNull
+    @Column(name = "name", nullable = false)
     private String name;
 
     @NotNull
-    @Column(name = "surname")
+    @Column(name = "surname", nullable = false)
     private String surname;
 
     @Column(name = "patronymic")
     private String patronymic;
 
     @NotNull
-    @Column
+    @Column(name = "gender", nullable = false)
     private String gender;
 
     @NotNull
-    @Column(name = "birth_date")
+    @Column(name = "birth_date", nullable = false)
     private Date birthDate;
 
     @NotNull
     @ManyToOne(
             fetch = FetchType.EAGER
     )
-    @JoinColumn(name = "department")
+    @JoinColumn(name = "department", nullable = false)
     private DepartmentEntity department;
 
     @NotNull
     @ManyToOne(
             fetch = FetchType.EAGER
     )
-    @JoinColumn(name = "position_id")
+    @JoinColumn(name = "position", nullable = false)
     private PositionEntity position;
 
     @NotNull
-    @Column
+    @Column(name = "grade", nullable = false)
     private int grade;
 
     @NotNull
-    @Column
+    @Column(name = "salary", nullable = false)
     private int salary;
 
 }

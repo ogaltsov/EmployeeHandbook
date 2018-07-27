@@ -22,20 +22,20 @@ public class CertificateEntity {
     private Long id;
 
     @OneToMany(fetch = FetchType.EAGER)
-    @Column(name = "employee")
+    @Column(name = "employee", nullable = false)
     private EmployeeEntity employee;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private  String name;
 
     @Column(name = "date")
     @Temporal(TemporalType.DATE)
     private Date date;
 
-    @Column(name = "company")
+    @Column(name = "company", nullable = false)
     private String company;
 
-    @Column(name = "number")
+    @Column(name = "number", nullable = false)
     private String number;
 
     @Column(name = "scan")
