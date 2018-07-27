@@ -2,9 +2,9 @@ package org.devgroup.handbook.service;
 
 import org.devgroup.handbook.dao.EmployeeDao;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.devgroup.handbook.dto.ChangeEmployeeRequest;
-import org.devgroup.handbook.dto.CreateEmployeeRequest;
-import org.devgroup.handbook.dto.TransferEmployeeRequest;
+import org.devgroup.handbook.dto.Request.ChangeEmployeeRequest;
+import org.devgroup.handbook.dto.Request.CreateEmployeeRequest;
+import org.devgroup.handbook.dto.Request.TransferEmployeeRequest;
 
 public class EmployeeServiceImpl implements EmployeeService {
 

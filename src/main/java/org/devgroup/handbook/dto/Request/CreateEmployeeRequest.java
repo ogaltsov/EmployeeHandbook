@@ -1,6 +1,7 @@
-package org.devgroup.handbook.dto;
+package org.devgroup.handbook.dto.Request;
 
 import lombok.*;
+import org.devgroup.handbook.dto.Certificate;
 
 import java.math.BigDecimal;
 import java.util.Date;

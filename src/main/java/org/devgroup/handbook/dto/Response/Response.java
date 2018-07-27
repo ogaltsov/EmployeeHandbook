@@ -1,4 +1,4 @@
-package org.devgroup.handbook.dto;
+package org.devgroup.handbook.dto.Response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,18 +24,4 @@ public class Response<T> {
     }
 
     //todo: fix problems with builder()
-    public Response(String message) {
-        this.message = message;
-    }
-
-    //todo: fix problems with builder()
-    public Response(List<T> list) {
-        this.list = list;
-    }
-
-    //todo: fix problems with builder()
-    public Response(String message, List<T> list) {
-        this.message = message;
-        this.list = list;
-    }
 }

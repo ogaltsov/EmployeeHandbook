@@ -1,4 +1,4 @@
-package org.devgroup.handbook.dto;
+package org.devgroup.handbook.dto.Request;
 
 import lombok.*;
 
