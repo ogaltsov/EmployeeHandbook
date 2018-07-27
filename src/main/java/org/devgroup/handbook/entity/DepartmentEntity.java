@@ -12,10 +12,6 @@ public class DepartmentEntity {
     @GeneratedValue
     private Long id;
 
-//    @JsonIgnore
-//    @Version
-//    private Integer version = 0;
-
     @NotNull
     @Size(min = 3, max = 255)
     @Basic(optional = false)

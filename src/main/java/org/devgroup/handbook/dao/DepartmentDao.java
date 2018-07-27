@@ -35,7 +35,6 @@ public class DepartmentDao extends Dao<DepartmentEntity,Long> {
 
     @Override
     List<DepartmentEntity> getWithCriteria(CriteriaQuery<DepartmentEntity> criteriaQuery) {
-        //todo: realise, but for what?
-        return null;
+        return getCurrentSession().createQuery(criteriaQuery).list();
     }
 }
