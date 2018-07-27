@@ -3,6 +3,8 @@ package org.devgroup.handbook.dto;
 import lombok.*;
 import java.util.Date;
 
+
+// todo: redesign class after redesignin "history" table
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

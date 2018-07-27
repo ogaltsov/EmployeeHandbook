@@ -14,5 +14,6 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "??")
 public class HistoryEntity {
-    //
+
+    //todo: first redesign "history" table -->  than write Entity
 }

@@ -1,6 +1,5 @@
 package org.devgroup.handbook.service;
 
-import org.devgroup.handbook.dao.DepartmentDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
