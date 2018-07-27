@@ -36,7 +36,6 @@ public class EmployeeDao extends Dao<EmployeeEntity, Long> {
 
     @Override
     List<EmployeeEntity> getWithCriteria(CriteriaQuery<EmployeeEntity> criteriaQuery) {
-        //todo: realise, but for what?
-        return null;
+        return getCurrentSession().createQuery(criteriaQuery).list();
     }
 }
