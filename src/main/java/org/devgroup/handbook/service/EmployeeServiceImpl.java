@@ -30,4 +30,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     public String removeEmployee(long id){
         return "null";  //todo: return answer from org.devgroup.handbook.dao
     }
+
+    @Override
+    public String getListEmployeeOfDepartment(long id) {
+        return null;
+    }
 }

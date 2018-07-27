@@ -1,4 +1,4 @@
-package org.devgroup.handbook.errors;
+package org.devgroup.handbook.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
