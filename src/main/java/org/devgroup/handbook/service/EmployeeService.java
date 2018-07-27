@@ -1,16 +1,16 @@
 package org.devgroup.handbook.service;
 
-import org.devgroup.handbook.dto.Request.ChangeEmployeeRequest;
-import org.devgroup.handbook.dto.Request.CreateEmployeeRequest;
-import org.devgroup.handbook.dto.Request.TransferEmployeeRequest;
+import org.devgroup.handbook.dto.Request.ChangeEmployee;
+import org.devgroup.handbook.dto.Request.CreateEmployee;
+import org.devgroup.handbook.dto.Request.TransferEmployee;
 
 public interface EmployeeService {
 
-    String createEmployee(CreateEmployeeRequest createEmployeeRequest);
+    String createEmployee(CreateEmployee createEmployeeRequest);
 
-    String transferEmployee(TransferEmployeeRequest transferEmployeeRequest);
+    String transferEmployee(TransferEmployee transferEmployeeRequest);
 
-    String changeEmployee(ChangeEmployeeRequest changeEmployeeRequest);
+    String changeEmployee(ChangeEmployee changeEmployeeRequest);
 
     String removeEmployee(long id);
 

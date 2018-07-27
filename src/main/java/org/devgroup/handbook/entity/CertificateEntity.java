@@ -26,7 +26,7 @@ public class CertificateEntity {
     private EmployeeEntity employee;
 
     @Column(name = "name", nullable = false)
-    private  String name;
+    private String name;
 
     @Column(name = "date")
     @Temporal(TemporalType.DATE)

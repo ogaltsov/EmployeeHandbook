@@ -8,15 +8,15 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ChangeEmployeeRequest {
+public class ChangeEmployee {
     @NonNull
     private long employeeId;
     private int positionId;
     private int gradeId;
     private BigDecimal salary;
 
-    public boolean isCorrect(){
-        if(positionId!=0 || gradeId!=0 || salary!=null)
+    public boolean isCorrect() {
+        if (positionId != 0 || gradeId != 0 || salary != null)
             return true;
         else
             return false;

@@ -24,7 +24,7 @@ public class DepartmentEntity {
 
     @NotNull
     @OneToOne
-    @JoinColumn(name = "headEmployee",referencedColumnName = "id")
+    @JoinColumn(name = "headEmployee", referencedColumnName = "id")
     private EmployeeEntity headEmployee;
 
     @ManyToOne(fetch = FetchType.EAGER)

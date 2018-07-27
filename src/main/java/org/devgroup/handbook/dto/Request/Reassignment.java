@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReassignmentRequest {
+public class Reassignment {
 
     private long idBranches;
 

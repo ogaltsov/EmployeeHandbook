@@ -6,7 +6,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TransferEmployeeRequest {
+public class TransferEmployee {
     @NonNull
     private long employeeId;
     @NonNull

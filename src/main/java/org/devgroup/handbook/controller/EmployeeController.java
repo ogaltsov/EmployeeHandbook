@@ -1,17 +1,17 @@
 package org.devgroup.handbook.controller;
 
-import org.devgroup.handbook.dto.Request.ChangeEmployeeRequest;
-import org.devgroup.handbook.dto.Request.CreateEmployeeRequest;
+import org.devgroup.handbook.dto.Request.ChangeEmployee;
+import org.devgroup.handbook.dto.Request.CreateEmployee;
 import org.devgroup.handbook.dto.Response.Response;
-import org.devgroup.handbook.dto.Request.TransferEmployeeRequest;
+import org.devgroup.handbook.dto.Request.TransferEmployee;
 
 public interface EmployeeController {
 
-    Response createEmployee(CreateEmployeeRequest createEmployeeRequest);
+    Response createEmployee(CreateEmployee createEmployeeRequest);
 
-    Response transferEmployee(TransferEmployeeRequest transferEmployeeRequest);
+    Response transferEmployee(TransferEmployee transferEmployeeRequest);
 
-    Response changeEmployee(ChangeEmployeeRequest changeEmployeeRequest);
+    Response changeEmployee(ChangeEmployee changeEmployeeRequest);
 
     Response removeEmployee(long id);
 

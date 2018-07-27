@@ -16,8 +16,8 @@ public class Response<T> {
     private String message;
     private List<T> list;
 
-    public void addToList(T object){
-        if(list==null){
+    public void addToList(T object) {
+        if (list == null) {
             list = new ArrayList<T>();
         }
         list.add(object);

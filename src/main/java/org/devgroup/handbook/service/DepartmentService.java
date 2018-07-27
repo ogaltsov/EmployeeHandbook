@@ -1,8 +1,8 @@
 package org.devgroup.handbook.service;
 
-import org.devgroup.handbook.dto.Request.CreateDepartmentRequest;
-import org.devgroup.handbook.dto.Request.ReassignmentRequest;
-import org.devgroup.handbook.dto.Response.Response;
+import org.devgroup.handbook.dto.Request.CreateDepartment;
+import org.devgroup.handbook.dto.Request.Reassignment;
+
 
 public interface DepartmentService {
 
@@ -10,9 +10,9 @@ public interface DepartmentService {
 
     String searchListBranches(long id);
 
-    String createDepartment(CreateDepartmentRequest createDepartmentRequest);
+    String createDepartment(CreateDepartment createDepartmentRequest);
 
-    String reassignmentDepartment(ReassignmentRequest reassignmentRequest);
+    String reassignmentDepartment(Reassignment reassignmentRequest);
 
     //todo: merge other methods from "DBaranov"
 }
