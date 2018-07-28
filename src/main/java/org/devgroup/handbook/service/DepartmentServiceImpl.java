@@ -1,41 +1,66 @@
 package org.devgroup.handbook.service;
 
 import org.devgroup.handbook.dao.DepartmentDao;
+import org.devgroup.handbook.dao.EmployeeDao;
 import org.devgroup.handbook.dto.Request.CreateDepartment;
 import org.devgroup.handbook.dto.Request.Reassignment;
 import org.devgroup.handbook.entity.DepartmentEntity;
-import org.hibernate.query.Query;
+import org.devgroup.handbook.entity.EmployeeEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import java.util.List;
 
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
 
     private DepartmentDao departmentDao;
+    private EmployeeDao employeeDao;
 
-    @Autowired
-    public DepartmentServiceImpl(DepartmentDao departmentDao) {
-        this.departmentDao = departmentDao;
-    }
-
+    @Override
     public String closeDepartment(long id) {
+
+        Long countOfEmployee;
+        Long countOfDep;
+
+        employeeDao.openCurrentSessionWithTransaction();
+        {
+            CriteriaBuilder criteriaBuilder = employeeDao.getCurrentSession().getCriteriaBuilder();
+            CriteriaQuery<Long> countEmployeeQuery = criteriaBuilder.createQuery(Long.class);
+            Root<EmployeeEntity> employeeRoot = countEmployeeQuery.from(EmployeeEntity.class);
+            countEmployeeQuery.select(criteriaBuilder.count(employeeRoot));
+            countEmployeeQuery.where(criteriaBuilder.equal(employeeRoot.get("department"), id));
+            countOfEmployee = employeeDao.getCurrentSession().createQuery(countEmployeeQuery).getSingleResult();
+        }
+        employeeDao.closeCurrentSessionWithTransaction();
+
+        if(countOfEmployee==0)
+            return "you cannot close dep, cause: it has employees";
+
+
         departmentDao.openCurrentSessionWithTransaction();
+        {
+            CriteriaBuilder criteriaBuilder = departmentDao.getCurrentSession().getCriteriaBuilder();
+            CriteriaQuery<Long> countDepartmentQuery = criteriaBuilder.createQuery(Long.class);
+            Root<DepartmentEntity> depRoot = countDepartmentQuery.from(DepartmentEntity.class);
+            countDepartmentQuery.select(criteriaBuilder.count(depRoot));
+            countDepartmentQuery.where(criteriaBuilder.equal(depRoot.get("parentDepartment"), id));
+            countOfDep = departmentDao.getCurrentSession().createQuery(countDepartmentQuery).getSingleResult();
+        }
+        departmentDao.closeCurrentSessionWithTransaction();
 
-        {     ///// ОЧЕНЬ СОМНИТЕЛЬНЫЙ КОД **START**
-            CriteriaBuilder cBuilder = departmentDao.getCurrentSession().getCriteriaBuilder();
-            CriteriaQuery<DepartmentEntity> cQuery = cBuilder.createQuery(DepartmentEntity.class);
-            Root<DepartmentEntity> depRoot = cQuery.from(DepartmentEntity.class);
-            cQuery.select(depRoot).where(cBuilder.equal(depRoot.get("id"), id));
-            Query<DepartmentEntity> query = departmentDao.getCurrentSession().createQuery(cQuery);
-            List<DepartmentEntity> list = query.list();
-        }    /////// ОЧЕНЬ СОМНИТЕЛЬНЫЙ КОД **END**
+        if(countOfDep==0)
+            return "you cannot close dep, cause: it has subDeps";
 
-        return null;
+        departmentDao.openCurrentSessionWithTransaction();
+        {
+            departmentDao.delete(id);
+        }
+        departmentDao.closeCurrentSessionWithTransaction();
+
+        return "dep was deleted successfully";
 
     }
 
@@ -55,4 +80,14 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
 
+
+
+    @Autowired
+    public void setDepartmentDao(DepartmentDao departmentDao) {
+        this.departmentDao = departmentDao;
+    }
+    @Autowired
+    public void setEmployeeDao(EmployeeDao employeeDao) {
+        this.employeeDao = employeeDao;
+    }
 }
