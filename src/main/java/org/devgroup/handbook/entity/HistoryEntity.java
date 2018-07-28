@@ -11,7 +11,6 @@ import javax.persistence.Table;
 @Data
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name = "??")
 public class HistoryEntity {
