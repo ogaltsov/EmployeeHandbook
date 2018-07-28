@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Reassignment {
 
-    private long idBranches;
+    private long idDepToReassign;
 
-    private long idParent;
+    private long idNewParentDep;
 }

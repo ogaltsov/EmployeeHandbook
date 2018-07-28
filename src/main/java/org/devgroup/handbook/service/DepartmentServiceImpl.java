@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.util.List;
 
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
@@ -62,22 +63,60 @@ public class DepartmentServiceImpl implements DepartmentService {
         }
         departmentDao.closeCurrentSessionWithTransaction();
 
-        return "dep was deleted successfully";
+        return "dep was deleted successfully";  //todo: handle exceptions(trans crushes), return request(class)
     }
 
     @Override
     public String searchListBranches(long id) {
-        return null;
+        List<DepartmentEntity> listOfDepartment;
+
+        departmentDao.openCurrentSessionWithTransaction();
+        {
+            CriteriaBuilder criteriaBuilder = departmentDao.getCurrentSession().getCriteriaBuilder();
+            CriteriaQuery<DepartmentEntity> departmentQuery = criteriaBuilder.createQuery(DepartmentEntity.class);
+            Root<DepartmentEntity> depRoot = departmentQuery.from(DepartmentEntity.class);
+            departmentQuery.where(criteriaBuilder.equal(depRoot.get("parentDepartment"), id));
+            listOfDepartment = departmentDao.getCurrentSession().createQuery(departmentQuery).list();
+        }
+        departmentDao.closeCurrentSessionWithTransaction();
+        return null; //todo: return list, handle exc
     }
 
     @Override
-    public String createDepartment(CreateDepartment createDepartmentRequest) {
-        return null;
+    public String createDepartment(CreateDepartment createDepRequest) {
+        departmentDao.openCurrentSessionWithTransaction();
+        DepartmentEntity department = departmentDao.getEntityById(createDepRequest.getParentDepartment());
+        departmentDao.closeCurrentSessionWithTransaction();
+
+        employeeDao.openCurrentSessionWithTransaction();
+        EmployeeEntity employee = employeeDao.getEntityById(createDepRequest.getHeadEmployee());
+        employeeDao.closeCurrentSessionWithTransaction();
+
+        DepartmentEntity newDepartment = DepartmentEntity.builder()
+                .parentDepartment(department)
+                .headEmployee(employee)
+                .name(createDepRequest.getName())
+                .build();
+
+        departmentDao.openCurrentSessionWithTransaction();
+        departmentDao.create(newDepartment);
+        departmentDao.closeCurrentSessionWithTransaction();
+
+        return "success";  //todo: handle exception(if transaction crushes, ), return request(class)
     }
 
     @Override
     public String reassignmentDepartment(Reassignment reassignmentRequest) {
-        return null;
+
+        departmentDao.openCurrentSessionWithTransaction();
+
+        DepartmentEntity depToReassign = departmentDao.getEntityById(reassignmentRequest.getIdDepToReassign());
+        DepartmentEntity newParentDep = departmentDao.getEntityById(reassignmentRequest.getIdNewParentDep());
+        depToReassign.setParentDepartment(newParentDep);
+        departmentDao.update(depToReassign);
+
+        departmentDao.closeCurrentSessionWithTransaction();
+        return "success"; //todo: handle exception, return request(class)
     }
 
 
