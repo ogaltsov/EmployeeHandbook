@@ -2,6 +2,7 @@ package org.devgroup.handbook.service;
 
 import org.devgroup.handbook.dao.DepartmentDao;
 import org.devgroup.handbook.dao.EmployeeDao;
+import org.devgroup.handbook.dao.PositionDao;
 import org.devgroup.handbook.dto.Request.ChangeEmployee;
 import org.devgroup.handbook.dto.Request.CreateEmployee;
 import org.devgroup.handbook.dto.Request.TransferEmployee;
@@ -40,7 +41,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .department(department)
                 .position(position)
                 .grade(createEmployeeRequest.getGrade())
-                .salary(createEmployeeRequest.getSalary())  //todo: int <--> BigDecimal
+                .salary(createEmployeeRequest.getSalary())
                 .build();
         employeeDao.create(employee);
         employeeDao.closeCurrentSessionWithTransaction();
@@ -48,7 +49,16 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     public String transferEmployee(TransferEmployee transferEmployeeRequest) {
-        return "null";  //todo: return answer from dao
+        employeeDao.openCurrentSessionWithTransaction();
+        EmployeeEntity employee = employeeDao.getEntityById(transferEmployeeRequest.getEmployeeId());
+
+        departmentDao.openCurrentSessionWithTransaction();
+        DepartmentEntity department = departmentDao.getEntityById(transferEmployeeRequest.getDepIdTo());
+        departmentDao.closeCurrentSessionWithTransaction();
+
+        employee.setDepartment(department);
+        employeeDao.closeCurrentSessionWithTransaction();
+        return "successful";  //todo: return answer from dao, exc
     }
 
     public String changeEmployee(ChangeEmployee changeEmployeeRequest) {

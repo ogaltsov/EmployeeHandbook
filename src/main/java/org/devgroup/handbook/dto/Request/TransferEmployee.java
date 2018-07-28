@@ -10,7 +10,7 @@ public class TransferEmployee {
     @NonNull
     private long employeeId;
     @NonNull
-    private long depIdFrom;
+    private long depIdFrom; //todo: is redundant?
     @NonNull
     private long depIdTo;
 

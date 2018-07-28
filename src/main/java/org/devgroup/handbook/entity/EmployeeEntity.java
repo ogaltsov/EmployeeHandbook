@@ -4,9 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.devgroup.handbook.util.BigDecimalConverter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
@@ -60,7 +62,8 @@ public class EmployeeEntity {
     private int grade;
 
     @NotNull
+    @Convert(converter = BigDecimalConverter.class) //convert BigDecimal to Long(123.75 <-->  12375(100))
     @Column(name = "salary", nullable = false)
-    private int salary;
+    private BigDecimal salary;
 
 }
