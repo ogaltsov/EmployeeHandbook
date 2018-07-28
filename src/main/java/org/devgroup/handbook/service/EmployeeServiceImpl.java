@@ -16,19 +16,19 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     public String createEmployee(CreateEmployee createEmployeeRequest) {
-        return "null";  //todo: return answer from org.devgroup.handbook.dao
+        return "null";  //todo: return answer from dao
     }
 
     public String transferEmployee(TransferEmployee transferEmployeeRequest) {
-        return "null";  //todo: return answer from org.devgroup.handbook.dao
+        return "null";  //todo: return answer from dao
     }
 
     public String changeEmployee(ChangeEmployee changeEmployeeRequest) {
-        return "null";  //todo: return answer from org.devgroup.handbook.dao
+        return "null";  //todo: return answer from dao
     }
 
     public String removeEmployee(long id) {
-        return "null";  //todo: return answer from org.devgroup.handbook.dao
+        return "null";  //todo: return answer from dao
     }
 
     @Override
