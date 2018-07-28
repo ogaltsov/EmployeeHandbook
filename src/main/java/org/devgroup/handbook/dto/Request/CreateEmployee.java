@@ -22,9 +22,9 @@ public class CreateEmployee {
     @NonNull
     private Date birthDate;
     @NonNull
-    private String departmentName;
+    private Long idDepartment;
     @NonNull
-    private String positionName;
+    private Long idPosition;
     @NonNull
     private int grade;
     @NonNull
