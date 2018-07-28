@@ -8,7 +8,6 @@ import org.devgroup.handbook.entity.DepartmentEntity;
 import org.devgroup.handbook.entity.EmployeeEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -25,6 +24,8 @@ public class DepartmentServiceImpl implements DepartmentService {
         Long countOfEmployee;
         Long countOfDep;
 
+        //build CriteriaQuery to check if department have employees, likewise SQL query:
+        //select count(*) from employee where department_id = ...
         employeeDao.openCurrentSessionWithTransaction();
         {
             CriteriaBuilder criteriaBuilder = employeeDao.getCurrentSession().getCriteriaBuilder();
@@ -39,7 +40,8 @@ public class DepartmentServiceImpl implements DepartmentService {
         if(countOfEmployee==0)
             return "you cannot close dep, cause: it has employees";
 
-
+        //build CriteriaQuery to check if department have sub-departments, likewise SQL query:
+        //select count(*) from department where parent_department = ...
         departmentDao.openCurrentSessionWithTransaction();
         {
             CriteriaBuilder criteriaBuilder = departmentDao.getCurrentSession().getCriteriaBuilder();
@@ -61,7 +63,6 @@ public class DepartmentServiceImpl implements DepartmentService {
         departmentDao.closeCurrentSessionWithTransaction();
 
         return "dep was deleted successfully";
-
     }
 
     @Override
