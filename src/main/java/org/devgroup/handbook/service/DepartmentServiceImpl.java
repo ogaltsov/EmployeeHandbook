@@ -34,7 +34,7 @@ public class DepartmentServiceImpl implements DepartmentService {
             Root<EmployeeEntity> employeeRoot = countEmployeeQuery.from(EmployeeEntity.class);
             countEmployeeQuery.select(criteriaBuilder.count(employeeRoot));
             countEmployeeQuery.where(criteriaBuilder.equal(employeeRoot.get("department"), id));
-            countOfEmployee = employeeDao.getCurrentSession().createQuery(countEmployeeQuery).getSingleResult();
+            countOfEmployee = employeeDao.getWithCriteria(countEmployeeQuery).getSingleResult();
         }
         employeeDao.closeCurrentSessionWithTransaction();
 
@@ -50,7 +50,7 @@ public class DepartmentServiceImpl implements DepartmentService {
             Root<DepartmentEntity> depRoot = countDepartmentQuery.from(DepartmentEntity.class);
             countDepartmentQuery.select(criteriaBuilder.count(depRoot));
             countDepartmentQuery.where(criteriaBuilder.equal(depRoot.get("parentDepartment"), id));
-            countOfDep = departmentDao.getCurrentSession().createQuery(countDepartmentQuery).getSingleResult();
+            countOfDep = departmentDao.getWithCriteria(countDepartmentQuery).getSingleResult();
         }
         departmentDao.closeCurrentSessionWithTransaction();
 

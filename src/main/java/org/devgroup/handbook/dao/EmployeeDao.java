@@ -1,8 +1,7 @@
 package org.devgroup.handbook.dao;
 
 import org.devgroup.handbook.entity.EmployeeEntity;
-import org.hibernate.Session;
-
+import org.hibernate.query.Query;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 
@@ -35,7 +34,7 @@ public class EmployeeDao extends Dao<EmployeeEntity, Long> {
     }
 
     @Override
-    List<EmployeeEntity> getWithCriteria(CriteriaQuery<EmployeeEntity> criteriaQuery) {
-        return getCurrentSession().createQuery(criteriaQuery).list();
+    public <T> Query<T> getWithCriteria(CriteriaQuery<T> criteriaQuery) {
+        return getCurrentSession().createQuery(criteriaQuery);
     }
 }

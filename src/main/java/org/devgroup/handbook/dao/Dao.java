@@ -6,6 +6,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.query.Query;
 
 import javax.persistence.criteria.CriteriaQuery;
 import java.io.Serializable;
@@ -72,5 +73,5 @@ public abstract class Dao<E, K extends Serializable> {
 
     abstract void create(E entity);
 
-    abstract List<E> getWithCriteria(CriteriaQuery<E> criteriaQuery);
+    abstract <T> Query<T> getWithCriteria(CriteriaQuery<T> criteriaQuery);
 }

@@ -1,6 +1,7 @@
 package org.devgroup.handbook.dao;
 
 import org.devgroup.handbook.entity.DepartmentEntity;
+import org.hibernate.query.Query;
 
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
@@ -34,7 +35,7 @@ public class DepartmentDao extends Dao<DepartmentEntity, Long> {
     }
 
     @Override
-    List<DepartmentEntity> getWithCriteria(CriteriaQuery<DepartmentEntity> criteriaQuery) {
-        return getCurrentSession().createQuery(criteriaQuery).list();
+    public <T> Query<T> getWithCriteria(CriteriaQuery<T> criteriaQuery) {
+        return getCurrentSession().createQuery(criteriaQuery);
     }
 }
