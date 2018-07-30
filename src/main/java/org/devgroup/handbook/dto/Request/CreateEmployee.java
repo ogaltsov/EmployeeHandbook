@@ -26,7 +26,7 @@ public class CreateEmployee {
     @NonNull
     private Long idPosition;
     @NonNull
-    private int grade;
+    private Long grade;
     @NonNull
     private BigDecimal salary;
     private List<Certificate> certificates;

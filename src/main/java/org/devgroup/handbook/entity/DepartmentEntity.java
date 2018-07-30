@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "??")
+@Table(name = "departments")
 public class DepartmentEntity {
     @Id
     @GeneratedValue
@@ -28,7 +28,7 @@ public class DepartmentEntity {
 
     @NotNull
     @OneToOne
-    @JoinColumn(name = "headEmployee", referencedColumnName = "id")
+    @JoinColumn(name = "head", referencedColumnName = "id")
     private EmployeeEntity headEmployee;
 
     @ManyToOne(fetch = FetchType.EAGER)

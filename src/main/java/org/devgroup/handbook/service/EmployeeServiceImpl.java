@@ -23,11 +23,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     private DepartmentDao departmentDao; //todo: edit diff dao's as interface
     private PositionDao positionDao;
 
-    @Autowired
-    public EmployeeServiceImpl(EmployeeDao employeeDao) {
-        this.employeeDao = employeeDao;
-    }
-
     @Transactional
     public String createEmployee(CreateEmployee createEmployeeRequest) {
         departmentDao.openCurrentSession();
@@ -102,5 +97,18 @@ public class EmployeeServiceImpl implements EmployeeService {
         List<EmployeeEntity> listOfEmployee = employeeDao.getWithCriteria(criteriaQuery).list();
         employeeDao.closeCurrentSession();
         return listOfEmployee;
+    }
+
+    @Autowired
+    public void setEmployeeDao(EmployeeDao employeeDao) {
+        this.employeeDao = employeeDao;
+    }
+    @Autowired
+    public void setDepartmentDao(DepartmentDao departmentDao) {
+        this.departmentDao = departmentDao;
+    }
+    @Autowired
+    public void setPositionDao(PositionDao positionDao) {
+        this.positionDao = positionDao;
     }
 }

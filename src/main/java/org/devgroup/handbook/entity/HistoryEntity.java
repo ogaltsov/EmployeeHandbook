@@ -1,19 +1,22 @@
-package org.devgroup.handbook.entity;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import javax.persistence.Entity;
-import javax.persistence.Table;
-
-@Data
-@Builder
-@AllArgsConstructor
-@Entity
-@Table(name = "??")
-public class HistoryEntity {
-
-    //todo: first redesign "history" table -->  than write Entity
-}
+//package org.devgroup.handbook.entity;
+//
+//import lombok.AllArgsConstructor;
+//import lombok.Builder;
+//import lombok.Data;
+//
+//import javax.persistence.*;
+//
+//@Data
+//@Builder
+//@AllArgsConstructor
+//@Entity
+//@Table(name = "history")
+//public class HistoryEntity {
+//
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Column
+//    private long id;
+//
+//    //todo: first redesign "history" table -->  than write Entity
+//}

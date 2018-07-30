@@ -2,21 +2,16 @@ package org.devgroup.handbook.controller;
 
 import org.devgroup.handbook.dto.Request.CreateDepartment;
 import org.devgroup.handbook.dto.Request.Reassignment;
+import org.devgroup.handbook.dto.Response.Response;
 import org.devgroup.handbook.exception.MyException;
+import org.devgroup.handbook.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.devgroup.handbook.service.DepartmentService;
-import org.devgroup.handbook.dto.Response.Response;
 
 @RestController
 public class DepartmentControllerImpl implements DepartmentController {
 
     private DepartmentService departmentService;
-
-    @Autowired
-    public DepartmentControllerImpl(DepartmentService departmentService) {
-        this.departmentService = departmentService;
-    }
 
     @RequestMapping(value = "/closeDepartment", method = RequestMethod.DELETE)
     public Response closeDepartment(@RequestParam(value = "id") long id) {  //if have no param -> exception
@@ -64,5 +59,10 @@ public class DepartmentControllerImpl implements DepartmentController {
                     .message(e.getResponse().getErrorCode() + e.getResponse().getErrorMessage())
                     .build();
         }
+    }
+
+    @Autowired
+    public void setDepartmentService(DepartmentService departmentService) {
+        this.departmentService = departmentService;
     }
 }

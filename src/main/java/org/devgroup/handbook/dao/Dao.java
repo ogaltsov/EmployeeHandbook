@@ -4,10 +4,10 @@ import lombok.NoArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.criteria.CriteriaQuery;
 import java.io.Serializable;
 import java.util.List;
@@ -15,6 +15,9 @@ import java.util.List;
 @NoArgsConstructor
 public abstract class Dao<E, K extends Serializable> {
 
+    @Autowired
+    private EntityManagerFactory entityManagerFactory;
+    private SessionFactory sessionFactory;
     private Session currentSession;
     private Transaction currentTransaction;
 
@@ -27,11 +30,8 @@ public abstract class Dao<E, K extends Serializable> {
         currentSession.close();
     }
 
-    private static SessionFactory getSessionFactory() {
-        Configuration configuration = new Configuration().configure();
-        StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
-                .applySettings(configuration.getProperties());
-        SessionFactory sessionFactory = configuration.buildSessionFactory(builder.build());
+    private SessionFactory getSessionFactory() {
+        sessionFactory = this.entityManagerFactory.unwrap(SessionFactory.class);
         return sessionFactory;
     }
 
@@ -48,6 +48,7 @@ public abstract class Dao<E, K extends Serializable> {
     }
 
     public Session getCurrentSession() {
+        currentSession = getSessionFactory().openSession();
         return currentSession;
     }
 

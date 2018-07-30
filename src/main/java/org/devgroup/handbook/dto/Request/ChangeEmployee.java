@@ -12,7 +12,7 @@ public class ChangeEmployee {
     @NonNull
     private long employeeId;
     private long positionId;
-    private int grade;
+    private long grade;
     private BigDecimal salary;
 
     public boolean isCorrect() {

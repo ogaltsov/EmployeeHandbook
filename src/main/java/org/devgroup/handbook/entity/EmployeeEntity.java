@@ -16,7 +16,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "??")
+@Table(name = "employees")
 public class EmployeeEntity {
 
     @Id
@@ -59,7 +59,7 @@ public class EmployeeEntity {
 
     @NotNull
     @Column(name = "grade", nullable = false)
-    private int grade;
+    private Long grade;
 
     @NotNull
     @Convert(converter = BigDecimalConverter.class) //convert BigDecimal to Long(123.75 <-->  12375(100))

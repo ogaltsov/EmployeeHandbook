@@ -16,7 +16,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "??")
+@Table(name = "positions")
 public class PositionEntity {
     @Id
     @Column

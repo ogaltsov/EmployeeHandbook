@@ -14,15 +14,17 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "??")
+@Table(name = "certificates")
 public class CertificateEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
     private Long id;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @Column(name = "employee", nullable = false)
+    @ManyToOne(
+            fetch = FetchType.EAGER
+    )
+    @JoinColumn(name = "employee", nullable = false)
     private EmployeeEntity employee;
 
     @Column(name = "name", nullable = false)

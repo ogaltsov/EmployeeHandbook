@@ -1,0 +1,9 @@
+spring:
+    datasource:
+        url: jdbc:sqlite:src/main/resources/database/employee-handbook.sqlite
+        driver-class-name: org.sqlite.JDBC
+    jpa:
+        database-platform: com.enigmabridge.hibernate.dialect.SQLiteDialect
+        hibernate:
+            format_sql: true
+            ddl-auto: update
