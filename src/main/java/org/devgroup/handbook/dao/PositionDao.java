@@ -2,10 +2,12 @@ package org.devgroup.handbook.dao;
 
 import org.devgroup.handbook.entity.PositionEntity;
 import org.hibernate.query.Query;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 
+@Repository
 public class PositionDao extends Dao<PositionEntity,Long> {
 
     /////

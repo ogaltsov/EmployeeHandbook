@@ -2,9 +2,13 @@ package org.devgroup.handbook.dao;
 
 import org.devgroup.handbook.entity.EmployeeEntity;
 import org.hibernate.query.Query;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 
+@Repository
 public class EmployeeDao extends Dao<EmployeeEntity, Long> {
 
     @Override

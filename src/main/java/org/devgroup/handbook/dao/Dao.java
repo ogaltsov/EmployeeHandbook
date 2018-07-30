@@ -23,18 +23,7 @@ public abstract class Dao<E, K extends Serializable> {
         return currentSession;
     }
 
-    public Session openCurrentSessionWithTransaction() {
-        currentSession = getSessionFactory().openSession();
-        currentTransaction = currentSession.beginTransaction();
-        return currentSession;
-    }
-
     public void closeCurrentSession() {
-        currentSession.close();
-    }
-
-    public void closeCurrentSessionWithTransaction() {
-        currentTransaction.commit();
         currentSession.close();
     }
 

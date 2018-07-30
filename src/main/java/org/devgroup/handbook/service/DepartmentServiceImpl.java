@@ -8,6 +8,8 @@ import org.devgroup.handbook.entity.DepartmentEntity;
 import org.devgroup.handbook.entity.EmployeeEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -19,7 +21,9 @@ public class DepartmentServiceImpl implements DepartmentService {
     private DepartmentDao departmentDao;
     private EmployeeDao employeeDao;
 
+
     @Override
+    @Transactional
     public String closeDepartment(long id) {
 
         Long countOfEmployee;
@@ -27,7 +31,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
         //build CriteriaQuery to check if department have employees, likewise SQL query:
         //select count(*) from employee where department_id = ...
-        employeeDao.openCurrentSessionWithTransaction();
+        employeeDao.openCurrentSession();
         {
             CriteriaBuilder criteriaBuilder = employeeDao.getCurrentSession().getCriteriaBuilder();
             CriteriaQuery<Long> countEmployeeQuery = criteriaBuilder.createQuery(Long.class);
@@ -36,14 +40,14 @@ public class DepartmentServiceImpl implements DepartmentService {
             countEmployeeQuery.where(criteriaBuilder.equal(employeeRoot.get("department"), id));
             countOfEmployee = employeeDao.getWithCriteria(countEmployeeQuery).getSingleResult();
         }
-        employeeDao.closeCurrentSessionWithTransaction();
+        employeeDao.closeCurrentSession();
 
-        if(countOfEmployee==0)
+        if(countOfEmployee!=0)
             return "you cannot close dep, cause: it has employees";
 
         //build CriteriaQuery to check if department have sub-departments, likewise SQL query:
         //select count(*) from department where parent_department = ...
-        departmentDao.openCurrentSessionWithTransaction();
+        departmentDao.openCurrentSession();
         {
             CriteriaBuilder criteriaBuilder = departmentDao.getCurrentSession().getCriteriaBuilder();
             CriteriaQuery<Long> countDepartmentQuery = criteriaBuilder.createQuery(Long.class);
@@ -52,16 +56,16 @@ public class DepartmentServiceImpl implements DepartmentService {
             countDepartmentQuery.where(criteriaBuilder.equal(depRoot.get("parentDepartment"), id));
             countOfDep = departmentDao.getWithCriteria(countDepartmentQuery).getSingleResult();
         }
-        departmentDao.closeCurrentSessionWithTransaction();
+        departmentDao.closeCurrentSession();
 
-        if(countOfDep==0)
+        if(countOfDep!=0)
             return "you cannot close dep, cause: it has subDeps";
 
-        departmentDao.openCurrentSessionWithTransaction();
+        departmentDao.openCurrentSession();
         {
             departmentDao.delete(id);
         }
-        departmentDao.closeCurrentSessionWithTransaction();
+        departmentDao.closeCurrentSession();
 
         return "dep was deleted successfully";  //todo: handle exceptions(trans crushes), return request(class)
     }
@@ -70,7 +74,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     public String searchListBranches(long id) {
         List<DepartmentEntity> listOfDepartment;
 
-        departmentDao.openCurrentSessionWithTransaction();
+        departmentDao.openCurrentSession();
         {
             CriteriaBuilder criteriaBuilder = departmentDao.getCurrentSession().getCriteriaBuilder();
             CriteriaQuery<DepartmentEntity> departmentQuery = criteriaBuilder.createQuery(DepartmentEntity.class);
@@ -78,19 +82,20 @@ public class DepartmentServiceImpl implements DepartmentService {
             departmentQuery.where(criteriaBuilder.equal(depRoot.get("parentDepartment"), id));
             listOfDepartment = departmentDao.getCurrentSession().createQuery(departmentQuery).list();
         }
-        departmentDao.closeCurrentSessionWithTransaction();
+        departmentDao.closeCurrentSession();
         return null; //todo: return list, handle exc
     }
 
     @Override
+    @Transactional
     public String createDepartment(CreateDepartment createDepRequest) {
-        departmentDao.openCurrentSessionWithTransaction();
+        departmentDao.openCurrentSession();
         DepartmentEntity department = departmentDao.getEntityById(createDepRequest.getParentDepartment());
-        departmentDao.closeCurrentSessionWithTransaction();
+        departmentDao.closeCurrentSession();
 
-        employeeDao.openCurrentSessionWithTransaction();
+        employeeDao.openCurrentSession();
         EmployeeEntity employee = employeeDao.getEntityById(createDepRequest.getHeadEmployee());
-        employeeDao.closeCurrentSessionWithTransaction();
+        employeeDao.closeCurrentSession();
 
         DepartmentEntity newDepartment = DepartmentEntity.builder()
                 .parentDepartment(department)
@@ -98,24 +103,25 @@ public class DepartmentServiceImpl implements DepartmentService {
                 .name(createDepRequest.getName())
                 .build();
 
-        departmentDao.openCurrentSessionWithTransaction();
+        departmentDao.openCurrentSession();
         departmentDao.create(newDepartment);
-        departmentDao.closeCurrentSessionWithTransaction();
+        departmentDao.closeCurrentSession();
 
         return "success";  //todo: handle exception(if transaction crushes, ), return request(class)
     }
 
     @Override
+    @Transactional
     public String reassignmentDepartment(Reassignment reassignmentRequest) {
 
-        departmentDao.openCurrentSessionWithTransaction();
+        departmentDao.openCurrentSession();
 
         DepartmentEntity depToReassign = departmentDao.getEntityById(reassignmentRequest.getIdDepToReassign());
         DepartmentEntity newParentDep = departmentDao.getEntityById(reassignmentRequest.getIdNewParentDep());
         depToReassign.setParentDepartment(newParentDep);
         departmentDao.update(depToReassign);
 
-        departmentDao.closeCurrentSessionWithTransaction();
+        departmentDao.closeCurrentSession();
         return "success"; //todo: handle exception, return request(class)
     }
 

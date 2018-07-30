@@ -10,6 +10,12 @@ import org.devgroup.handbook.entity.DepartmentEntity;
 import org.devgroup.handbook.entity.EmployeeEntity;
 import org.devgroup.handbook.entity.PositionEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import java.util.List;
 
 public class EmployeeServiceImpl implements EmployeeService {
 
@@ -22,16 +28,17 @@ public class EmployeeServiceImpl implements EmployeeService {
         this.employeeDao = employeeDao;
     }
 
+    @Transactional
     public String createEmployee(CreateEmployee createEmployeeRequest) {
-        departmentDao.openCurrentSessionWithTransaction();
+        departmentDao.openCurrentSession();
         DepartmentEntity department = departmentDao.getEntityById(createEmployeeRequest.getIdDepartment());
-        departmentDao.closeCurrentSessionWithTransaction();
+        departmentDao.closeCurrentSession();
 
-        positionDao.openCurrentSessionWithTransaction();
+        positionDao.openCurrentSession();
         PositionEntity position = positionDao.getEntityById(createEmployeeRequest.getIdPosition());
-        positionDao.closeCurrentSessionWithTransaction();
+        positionDao.closeCurrentSession();
 
-        employeeDao.openCurrentSessionWithTransaction();
+        employeeDao.openCurrentSession();
         EmployeeEntity employee = EmployeeEntity.builder()
                 .name(createEmployeeRequest.getName())
                 .surname(createEmployeeRequest.getSurname())
@@ -44,33 +51,56 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .salary(createEmployeeRequest.getSalary())
                 .build();
         employeeDao.create(employee);
-        employeeDao.closeCurrentSessionWithTransaction();
+        employeeDao.closeCurrentSession();
         return "successful";  //todo: return answer from dao, handle exc
     }
 
+    @Transactional
     public String transferEmployee(TransferEmployee transferEmployeeRequest) {
-        employeeDao.openCurrentSessionWithTransaction();
+        employeeDao.openCurrentSession();
         EmployeeEntity employee = employeeDao.getEntityById(transferEmployeeRequest.getEmployeeId());
 
-        departmentDao.openCurrentSessionWithTransaction();
+        departmentDao.openCurrentSession();
         DepartmentEntity department = departmentDao.getEntityById(transferEmployeeRequest.getDepIdTo());
-        departmentDao.closeCurrentSessionWithTransaction();
+        departmentDao.closeCurrentSession();
 
         employee.setDepartment(department);
-        employeeDao.closeCurrentSessionWithTransaction();
+        employeeDao.closeCurrentSession();
         return "successful";  //todo: return answer from dao, exc
     }
 
+    @Transactional
     public String changeEmployee(ChangeEmployee changeEmployeeRequest) {
-        return "null";  //todo: return answer from dao
-    }
+        employeeDao.openCurrentSession();
+        EmployeeEntity employee = employeeDao.getEntityById(changeEmployeeRequest.getEmployeeId());
+        if(changeEmployeeRequest.getGrade()!=0)
+            employee.setGrade(changeEmployeeRequest.getGrade());
+        if(changeEmployeeRequest.getSalary()!=null)
+            employee.setSalary(changeEmployeeRequest.getSalary());
 
+        PositionEntity position = positionDao.getEntityById(changeEmployeeRequest.getPositionId());
+        if(position!=null)
+            employee.setPosition(position);
+        employeeDao.update(employee);
+        employeeDao.closeCurrentSession();
+        return "success";
+    }
+    @Transactional
     public String removeEmployee(long id) {
-        return "null";  //todo: return answer from dao
+        employeeDao.openCurrentSession();
+        employeeDao.delete(id);
+        employeeDao.closeCurrentSession();
+        return "success";
     }
 
     @Override
-    public String getListEmployeeOfDepartment(long id) {
-        return null;
+    public List<EmployeeEntity> getListEmployeeOfDepartment(long id) {
+        CriteriaBuilder criteriaBuilder = employeeDao.openCurrentSession().getCriteriaBuilder();
+        CriteriaQuery<EmployeeEntity> criteriaQuery = criteriaBuilder.createQuery(EmployeeEntity.class);
+        Root<EmployeeEntity> employeeRoot = criteriaQuery.from(EmployeeEntity.class);
+        criteriaQuery.where(criteriaBuilder.equal(employeeRoot.get("department"), id));
+        List<EmployeeEntity> listOfEmployee = employeeDao.getWithCriteria(criteriaQuery).list();
+        employeeDao.closeCurrentSession();
+        return listOfEmployee;
     }
 }
