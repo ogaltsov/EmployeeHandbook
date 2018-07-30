@@ -79,6 +79,7 @@ public class EmployeeControllerImpl {
                 .positionId(position)
                 .salary(new BigDecimal(salary))
                 .build();
+        System.out.println(changeEmployee);/////////////////////////////////////////
         String answer = employeeService.changeEmployee(changeEmployee);
         return Response.builder()
                 .message(answer)

@@ -23,6 +23,7 @@ public class EmployeeDao extends Dao<EmployeeEntity, Long> {
 
     @Override
     public void update(EmployeeEntity entity) {
+        System.out.println(getCurrentSession() + " current session");
         getCurrentSession().update(entity);
     }
 

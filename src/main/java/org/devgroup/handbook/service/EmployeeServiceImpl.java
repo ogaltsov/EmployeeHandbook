@@ -66,7 +66,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Transactional
     public String changeEmployee(ChangeEmployee changeEmployeeRequest) {
-        employeeDao.openCurrentSession();
+//        employeeDao.openCurrentSession();
+        System.out.println(employeeDao.openCurrentSession());///////
         EmployeeEntity employee = employeeDao.getEntityById(changeEmployeeRequest.getEmployeeId());
         if(changeEmployeeRequest.getGrade()!=0)
             employee.setGrade(changeEmployeeRequest.getGrade());
