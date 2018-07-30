@@ -11,12 +11,12 @@ import java.math.BigDecimal;
 public class ChangeEmployee {
     @NonNull
     private long employeeId;
-    private int positionId;
-    private int gradeId;
+    private long positionId;
+    private int grade;
     private BigDecimal salary;
 
     public boolean isCorrect() {
-        if (positionId != 0 || gradeId != 0 || salary != null)
+        if (positionId != 0 || grade != 0 || salary != null)
             return true;
         else
             return false;
