@@ -66,9 +66,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Transactional
     public String changeEmployee(ChangeEmployee changeEmployeeRequest) {
-//        employeeDao.openCurrentSession();
-        System.out.println(employeeDao.openCurrentSession());///////
+        employeeDao.openCurrentSession();
+        employeeDao.getCurrentSession().beginTransaction();
         EmployeeEntity employee = employeeDao.getEntityById(changeEmployeeRequest.getEmployeeId());
+        System.out.println(employee.getDepartment().getName());
         if(changeEmployeeRequest.getGrade()!=0)
             employee.setGrade(changeEmployeeRequest.getGrade());
         if(changeEmployeeRequest.getSalary()!=null)
@@ -77,7 +78,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         PositionEntity position = positionDao.getEntityById(changeEmployeeRequest.getPositionId());
         if(position!=null)
             employee.setPosition(position);
-        employeeDao.update(employee);
+        System.out.println(position);
+        employeeDao.getCurrentSession().saveOrUpdate(employee);
+        employeeDao.getCurrentSession().getTransaction().commit();
         employeeDao.closeCurrentSession();
         return "success";
     }

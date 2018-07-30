@@ -16,8 +16,6 @@ public class PositionDao extends Dao<PositionEntity,Long> {
 
 
 
-
-
     @Override
     public List<PositionEntity> getAll() {
         return null;
@@ -25,7 +23,7 @@ public class PositionDao extends Dao<PositionEntity,Long> {
 
     @Override
     public PositionEntity getEntityById(Long id) {
-        return null;
+        return getCurrentSession().get(PositionEntity.class, id);
     }
 
     @Override

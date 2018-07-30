@@ -48,7 +48,8 @@ public abstract class Dao<E, K extends Serializable> {
     }
 
     public Session getCurrentSession() {
-        currentSession = getSessionFactory().openSession();
+        if(currentSession==null)
+            currentSession = getSessionFactory().openSession();
         return currentSession;
     }
 

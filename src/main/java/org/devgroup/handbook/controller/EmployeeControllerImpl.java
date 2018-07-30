@@ -10,7 +10,6 @@ import org.devgroup.handbook.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -49,43 +48,43 @@ public class EmployeeControllerImpl {
 
     }
 
-//    @RequestMapping(value = "/changeEmployee", method = RequestMethod.PUT)
-//    public Response changeEmployee(@RequestBody ChangeEmployee changeEmployeeRequest) {
-//        try {
-//            if (changeEmployeeRequest.isCorrect()) {
-//                String answer = employeeService.changeEmployee(changeEmployeeRequest);
-//                return Response.builder()
-//                        .message(answer)
-//                        .build();
-//            }
-//            return Response.builder()
-//                    .message("incorrect response")
-//                    .build();
-//        } catch (MyException e) {
-//            return Response.builder()
-//                    .message(e.getResponse().getErrorCode() + e.getResponse().getErrorMessage())
-//                    .build();
-//        }
-//    }
-
-    @RequestMapping(value = "/changeEmployee", method = RequestMethod.GET)
-    public Response changeEmployee(@RequestParam(value = "id") Long id,
-                                   @RequestParam(value = "grade") Long grade,
-                                   @RequestParam(value = "salary") Double salary,
-                                   @RequestParam(value = "position") Long position) {
-        ChangeEmployee changeEmployee = ChangeEmployee.builder()
-                .employeeId(id)
-                .grade(grade)
-                .positionId(position)
-                .salary(new BigDecimal(salary))
-                .build();
-        System.out.println(changeEmployee);/////////////////////////////////////////
-        String answer = employeeService.changeEmployee(changeEmployee);
-        return Response.builder()
-                .message(answer)
-                .build();
-
+    @RequestMapping(value = "/changeEmployee", method = RequestMethod.PUT)  //method work correct
+    public Response changeEmployee(@RequestBody ChangeEmployee changeEmployeeRequest) {
+        try {
+            if (changeEmployeeRequest.isCorrect()) {
+                String answer = employeeService.changeEmployee(changeEmployeeRequest);
+                return Response.builder()
+                        .message(answer)
+                        .build();
+            }
+            return Response.builder()
+                    .message("incorrect response")
+                    .build();
+        } catch (MyException e) {
+            return Response.builder()
+                    .message(e.getResponse().getErrorCode() + e.getResponse().getErrorMessage())
+                    .build();
+        }
     }
+
+//    @RequestMapping(value = "/changeEmployee", method = RequestMethod.GET)
+//    public Response changeEmployee(@RequestParam(value = "id") Long id,
+//                                   @RequestParam(value = "grade") Long grade,
+//                                   @RequestParam(value = "salary") Double salary,
+//                                   @RequestParam(value = "position") Long position) {
+//        ChangeEmployee changeEmployee = ChangeEmployee.builder()
+//                .employeeId(id)
+//                .grade(grade)
+//                .positionId(position)
+//                .salary(new BigDecimal(salary))
+//                .build();
+//        System.out.println(changeEmployee);/////////////////////////////////////////
+//        String answer = employeeService.changeEmployee(changeEmployee);
+//        return Response.builder()
+//                .message(answer)
+//                .build();
+//
+//    }
 
     @RequestMapping(value = "/removeEmployee", method = RequestMethod.DELETE)
     public Response removeEmployee(@RequestParam(value = "id") long id) {
