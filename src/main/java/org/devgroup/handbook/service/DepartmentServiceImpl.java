@@ -31,7 +31,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
         //build CriteriaQuery to check if department have employees, likewise SQL query:
         //select count(*) from employee where department_id = ...
-        employeeDao.openCurrentSession();
+        employeeDao.openSession();
         {
             CriteriaBuilder criteriaBuilder = employeeDao.getCurrentSession().getCriteriaBuilder();
             CriteriaQuery<Long> countEmployeeQuery = criteriaBuilder.createQuery(Long.class);
@@ -40,14 +40,14 @@ public class DepartmentServiceImpl implements DepartmentService {
             countEmployeeQuery.where(criteriaBuilder.equal(employeeRoot.get("department"), id));
             countOfEmployee = employeeDao.getWithCriteria(countEmployeeQuery).getSingleResult();
         }
-        employeeDao.closeCurrentSession();
+        employeeDao.closeSession();
 
         if(countOfEmployee!=0)
             return "you cannot close dep, cause: it has employees";
 
         //build CriteriaQuery to check if department have sub-departments, likewise SQL query:
         //select count(*) from department where parent_department = ...
-        departmentDao.openCurrentSession();
+        departmentDao.openSession();
         {
             CriteriaBuilder criteriaBuilder = departmentDao.getCurrentSession().getCriteriaBuilder();
             CriteriaQuery<Long> countDepartmentQuery = criteriaBuilder.createQuery(Long.class);
@@ -56,16 +56,17 @@ public class DepartmentServiceImpl implements DepartmentService {
             countDepartmentQuery.where(criteriaBuilder.equal(depRoot.get("parentDepartment"), id));
             countOfDep = departmentDao.getWithCriteria(countDepartmentQuery).getSingleResult();
         }
-        departmentDao.closeCurrentSession();
+        departmentDao.closeSession();
 
         if(countOfDep!=0)
             return "you cannot close dep, cause: it has subDeps";
 
-        departmentDao.openCurrentSession();
+        departmentDao.openSession().beginTransaction();
         {
             departmentDao.delete(id);
         }
-        departmentDao.closeCurrentSession();
+        departmentDao.getCurrentSession().getTransaction().commit();
+        departmentDao.closeSession();
 
         return "dep was deleted successfully";  //todo: handle exceptions(trans crushes), return request(class)
     }
@@ -74,7 +75,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     public String searchListBranches(long id) {
         List<DepartmentEntity> listOfDepartment;
 
-        departmentDao.openCurrentSession();
+        departmentDao.openSession();
         {
             CriteriaBuilder criteriaBuilder = departmentDao.getCurrentSession().getCriteriaBuilder();
             CriteriaQuery<DepartmentEntity> departmentQuery = criteriaBuilder.createQuery(DepartmentEntity.class);
@@ -82,20 +83,20 @@ public class DepartmentServiceImpl implements DepartmentService {
             departmentQuery.where(criteriaBuilder.equal(depRoot.get("parentDepartment"), id));
             listOfDepartment = departmentDao.getCurrentSession().createQuery(departmentQuery).list();
         }
-        departmentDao.closeCurrentSession();
+        departmentDao.closeSession();
         return null; //todo: return list, handle exc
     }
 
     @Override
     @Transactional
     public String createDepartment(CreateDepartment createDepRequest) {
-        departmentDao.openCurrentSession();
+        departmentDao.openSession();
         DepartmentEntity department = departmentDao.getEntityById(createDepRequest.getParentDepartment());
-        departmentDao.closeCurrentSession();
+        departmentDao.closeSession();
 
-        employeeDao.openCurrentSession();
+        employeeDao.openSession();
         EmployeeEntity employee = employeeDao.getEntityById(createDepRequest.getHeadEmployee());
-        employeeDao.closeCurrentSession();
+        employeeDao.closeSession();
 
         DepartmentEntity newDepartment = DepartmentEntity.builder()
                 .parentDepartment(department)
@@ -103,9 +104,9 @@ public class DepartmentServiceImpl implements DepartmentService {
                 .name(createDepRequest.getName())
                 .build();
 
-        departmentDao.openCurrentSession();
+        departmentDao.openSession();
         departmentDao.create(newDepartment);
-        departmentDao.closeCurrentSession();
+        departmentDao.closeSession();
 
         return "success";  //todo: handle exception(if transaction crushes, ), return request(class)
     }
@@ -114,14 +115,14 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Transactional
     public String reassignmentDepartment(Reassignment reassignmentRequest) {
 
-        departmentDao.openCurrentSession();
+        departmentDao.openSession();
 
         DepartmentEntity depToReassign = departmentDao.getEntityById(reassignmentRequest.getIdDepToReassign());
         DepartmentEntity newParentDep = departmentDao.getEntityById(reassignmentRequest.getIdNewParentDep());
         depToReassign.setParentDepartment(newParentDep);
         departmentDao.update(depToReassign);
 
-        departmentDao.closeCurrentSession();
+        departmentDao.closeSession();
         return "success"; //todo: handle exception, return request(class)
     }
 

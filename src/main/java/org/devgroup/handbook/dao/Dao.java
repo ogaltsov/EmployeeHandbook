@@ -21,12 +21,12 @@ public abstract class Dao<E, K extends Serializable> {
     private Session currentSession;
     private Transaction currentTransaction;
 
-    public Session openCurrentSession() {
+    public Session openSession() {
         currentSession = getSessionFactory().openSession();
         return currentSession;
     }
 
-    public void closeCurrentSession() {
+    public void closeSession() {
         currentSession.close();
     }
 

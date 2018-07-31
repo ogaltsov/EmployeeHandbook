@@ -25,15 +25,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Transactional
     public String createEmployee(CreateEmployee createEmployeeRequest) {
-        departmentDao.openCurrentSession();
+        departmentDao.openSession();
         DepartmentEntity department = departmentDao.getEntityById(createEmployeeRequest.getIdDepartment());
-        departmentDao.closeCurrentSession();
 
-        positionDao.openCurrentSession();
         PositionEntity position = positionDao.getEntityById(createEmployeeRequest.getIdPosition());
-        positionDao.closeCurrentSession();
 
-        employeeDao.openCurrentSession();
         EmployeeEntity employee = EmployeeEntity.builder()
                 .name(createEmployeeRequest.getName())
                 .surname(createEmployeeRequest.getSurname())
@@ -46,27 +42,28 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .salary(createEmployeeRequest.getSalary())
                 .build();
         employeeDao.create(employee);
-        employeeDao.closeCurrentSession();
+        employeeDao.closeSession();
         return "successful";  //todo: return answer from dao, handle exc
     }
 
     @Transactional
     public String transferEmployee(TransferEmployee transferEmployeeRequest) {
-        employeeDao.openCurrentSession();
+        employeeDao.openSession();
+        employeeDao.getCurrentSession().beginTransaction();
         EmployeeEntity employee = employeeDao.getEntityById(transferEmployeeRequest.getEmployeeId());
 
-        departmentDao.openCurrentSession();
         DepartmentEntity department = departmentDao.getEntityById(transferEmployeeRequest.getDepIdTo());
-        departmentDao.closeCurrentSession();
 
         employee.setDepartment(department);
-        employeeDao.closeCurrentSession();
+        employeeDao.update(employee);
+        employeeDao.getCurrentSession().getTransaction().commit();
+        employeeDao.closeSession();
         return "successful";  //todo: return answer from dao, exc
     }
 
     @Transactional
     public String changeEmployee(ChangeEmployee changeEmployeeRequest) {
-        employeeDao.openCurrentSession();
+        employeeDao.openSession();
         employeeDao.getCurrentSession().beginTransaction();
         EmployeeEntity employee = employeeDao.getEntityById(changeEmployeeRequest.getEmployeeId());
         System.out.println(employee.getDepartment().getName());
@@ -81,25 +78,26 @@ public class EmployeeServiceImpl implements EmployeeService {
         System.out.println(position);
         employeeDao.getCurrentSession().saveOrUpdate(employee);
         employeeDao.getCurrentSession().getTransaction().commit();
-        employeeDao.closeCurrentSession();
+        employeeDao.closeSession();
         return "success";
     }
     @Transactional
     public String removeEmployee(long id) {
-        employeeDao.openCurrentSession();
+        employeeDao.openSession().beginTransaction();
         employeeDao.delete(id);
-        employeeDao.closeCurrentSession();
+        employeeDao.getCurrentSession().getTransaction().commit();
+        employeeDao.closeSession();
         return "success";
     }
 
     @Override
     public List<EmployeeEntity> getListEmployeeOfDepartment(long id) {
-        CriteriaBuilder criteriaBuilder = employeeDao.openCurrentSession().getCriteriaBuilder();
+        CriteriaBuilder criteriaBuilder = employeeDao.openSession().getCriteriaBuilder();
         CriteriaQuery<EmployeeEntity> criteriaQuery = criteriaBuilder.createQuery(EmployeeEntity.class);
         Root<EmployeeEntity> employeeRoot = criteriaQuery.from(EmployeeEntity.class);
         criteriaQuery.where(criteriaBuilder.equal(employeeRoot.get("department"), id));
         List<EmployeeEntity> listOfEmployee = employeeDao.getWithCriteria(criteriaQuery).list();
-        employeeDao.closeCurrentSession();
+        employeeDao.closeSession();
         return listOfEmployee;
     }
 
