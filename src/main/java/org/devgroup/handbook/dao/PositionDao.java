@@ -32,7 +32,7 @@ public class PositionDao extends Dao<PositionEntity,Long> {
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(PositionEntity position) {
 
     }
 
