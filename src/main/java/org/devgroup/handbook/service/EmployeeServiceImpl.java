@@ -9,6 +9,8 @@ import org.devgroup.handbook.dto.Request.TransferEmployee;
 import org.devgroup.handbook.entity.DepartmentEntity;
 import org.devgroup.handbook.entity.EmployeeEntity;
 import org.devgroup.handbook.entity.PositionEntity;
+import org.devgroup.handbook.exception.MyException;
+import org.devgroup.handbook.exception.ResponseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,63 +27,98 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Transactional
     public String createEmployee(CreateEmployee createEmployeeRequest) {
-        departmentDao.openSession();
-        DepartmentEntity department = departmentDao.getEntityById(createEmployeeRequest.getIdDepartment());
+        try {
+            employeeDao.openSession();
 
-        PositionEntity position = positionDao.getEntityById(createEmployeeRequest.getIdPosition());
+            DepartmentEntity department = departmentDao.getEntityById(createEmployeeRequest.getIdDepartment());
+            PositionEntity position = positionDao.getEntityById(createEmployeeRequest.getIdPosition());
 
-        EmployeeEntity employee = EmployeeEntity.builder()
-                .name(createEmployeeRequest.getName())
-                .surname(createEmployeeRequest.getSurname())
-                .patronymic(createEmployeeRequest.getPatronimyc())
-                .gender(createEmployeeRequest.getGenderName())      //todo: validate gender
-                .birthDate(createEmployeeRequest.getBirthDate())
-                .department(department)
-                .position(position)
-                .grade(createEmployeeRequest.getGrade())
-                .salary(createEmployeeRequest.getSalary())
-                .build();
-        employeeDao.create(employee);
-        employeeDao.closeSession();
-        return "successful";  //todo: return answer from dao, handle exc
+            if(department==null || position==null){
+                throw new NullPointerException();
+            }
+
+            EmployeeEntity employee = EmployeeEntity.builder()
+                    .name(createEmployeeRequest.getName())
+                    .surname(createEmployeeRequest.getSurname())
+                    .patronymic(createEmployeeRequest.getPatronymic())
+                    .gender(createEmployeeRequest.getGenderName())
+                    .birthDate(createEmployeeRequest.getBirthDate())
+                    .department(department)
+                    .position(position)
+                    .grade(createEmployeeRequest.getGrade())
+                    .salary(createEmployeeRequest.getSalary())
+                    .build();
+
+            employeeDao.create(employee);
+
+            employeeDao.closeSession();
+            return "Employee was created successfully";
+        } catch (IllegalArgumentException e){
+            e.printStackTrace();
+            ////////////////////// todo: fix exceptions
+            throw new MyException(ResponseException.FILE_NOT_FOUND);
+        } catch (NullPointerException e){ // if dep or pos not exist in db
+            e.printStackTrace();
+            ///////////////////  todo: fix exceptions
+            throw new MyException(ResponseException.FILE_NOT_FOUND);
+        } catch (Exception e){
+            e.printStackTrace();
+            /////////////////   todo: fix exceptions
+            throw new MyException(ResponseException.FILE_NOT_FOUND);
+        } finally {
+            employeeDao.closeSession();
+        }
     }
 
-    @Transactional
     public String transferEmployee(TransferEmployee transferEmployeeRequest) {
-        employeeDao.openSession();
-        employeeDao.getCurrentSession().beginTransaction();
-        EmployeeEntity employee = employeeDao.getEntityById(transferEmployeeRequest.getEmployeeId());
+        try {
+            employeeDao.openSession();
+            employeeDao.getCurrentSession().beginTransaction();
 
-        DepartmentEntity department = departmentDao.getEntityById(transferEmployeeRequest.getDepIdTo());
+            EmployeeEntity employee = employeeDao.getEntityById(transferEmployeeRequest.getEmployeeId());
+            DepartmentEntity department = departmentDao.getEntityById(transferEmployeeRequest.getDepIdTo());
 
-        employee.setDepartment(department);
-        employeeDao.update(employee);
-        employeeDao.getCurrentSession().getTransaction().commit();
-        employeeDao.closeSession();
-        return "successful";  //todo: return answer from dao, exc
+            if(employee==null || department==null){
+                throw new NullPointerException();
+            }
+
+            employee.setDepartment(department);
+            employeeDao.update(employee);
+            employeeDao.getCurrentSession().getTransaction().commit();
+            employeeDao.closeSession();
+            return "successful";  //todo: return answer from dao, exc
+        } catch (NullPointerException e){
+            e.printStackTrace();
+            ////////////////////   todo: fix exceptions
+            throw new MyException(ResponseException.FILE_NOT_FOUND);
+        }
     }
 
-    @Transactional
+
     public String changeEmployee(ChangeEmployee changeEmployeeRequest) {
         employeeDao.openSession();
         employeeDao.getCurrentSession().beginTransaction();
+
         EmployeeEntity employee = employeeDao.getEntityById(changeEmployeeRequest.getEmployeeId());
-        System.out.println(employee.getDepartment().getName());
-        if(changeEmployeeRequest.getGrade()!=0)
+
+        if(changeEmployeeRequest.getGrade()!=null)
             employee.setGrade(changeEmployeeRequest.getGrade());
         if(changeEmployeeRequest.getSalary()!=null)
             employee.setSalary(changeEmployeeRequest.getSalary());
 
-        PositionEntity position = positionDao.getEntityById(changeEmployeeRequest.getPositionId());
-        if(position!=null)
+        if(changeEmployeeRequest.getPositionId()!=null) {
+            PositionEntity position = positionDao.getEntityById(changeEmployeeRequest.getPositionId());
             employee.setPosition(position);
-        System.out.println(position);
+
+
+        }
+
         employeeDao.getCurrentSession().saveOrUpdate(employee);
         employeeDao.getCurrentSession().getTransaction().commit();
         employeeDao.closeSession();
         return "success";
     }
-    @Transactional
+
     public String removeEmployee(long id) {
         employeeDao.openSession().beginTransaction();
         employeeDao.delete(id);

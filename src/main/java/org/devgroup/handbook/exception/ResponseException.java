@@ -14,6 +14,7 @@ public enum ResponseException {
     INTERRUPTEDEXCEPTION(1005, "<Блокирование потока исполнения!"),
     NUMBER_FORMAT_EXCEPTION(1005, "Неверно указаны данные в исходном файле!");
 
+
     private int errorCode;
     private String errorMessage;
 

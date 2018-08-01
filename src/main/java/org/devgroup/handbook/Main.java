@@ -6,10 +6,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 @EnableJpaRepositories
 @SpringBootApplication
 @PropertySource({"classpath:application.yml"})
+
 public class Main {
 
     @Bean
@@ -17,20 +19,12 @@ public class Main {
         return new EmployeeServiceImpl();
     }
 
+    @Bean
+    public LocalValidatorFactoryBean localValidatorFactoryBean() {
+        return new LocalValidatorFactoryBean();
+    }
+
     public static void main(String[] args) {
         SpringApplication.run(Main.class);
-//        EmployeeControllerImpl employeeController = new EmployeeControllerImpl();
-//
-//        CreateEmployee createEmployee = CreateEmployee.builder()
-//                .name("Name1")
-//                .surname("Sur1")
-//                .genderName("M")
-//                .birthDate(new Date())
-//                .idDepartment(1L)
-//                .idPosition(1L)
-//                .salary(new BigDecimal(3456.45))
-//                .grade(5L)
-//                .build();
-//        employeeController.createEmployee(createEmployee);
     }
 }

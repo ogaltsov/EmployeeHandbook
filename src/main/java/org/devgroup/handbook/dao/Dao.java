@@ -2,27 +2,25 @@ package org.devgroup.handbook.dao;
 
 import lombok.NoArgsConstructor;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaQuery;
 import java.io.Serializable;
 import java.util.List;
 
 @NoArgsConstructor
 public abstract class Dao<E, K extends Serializable> {
-
     @Autowired
-    private EntityManagerFactory entityManagerFactory;
-    private SessionFactory sessionFactory;
+    private EntityManager entityManager;
+
     private Session currentSession;
     private Transaction currentTransaction;
 
     public Session openSession() {
-        currentSession = getSessionFactory().openSession();
+        currentSession = (Session) entityManager.getDelegate();
         return currentSession;
     }
 
@@ -30,10 +28,10 @@ public abstract class Dao<E, K extends Serializable> {
         currentSession.close();
     }
 
-    private SessionFactory getSessionFactory() {
-        sessionFactory = this.entityManagerFactory.unwrap(SessionFactory.class);
-        return sessionFactory;
-    }
+//    private SessionFactory getSessionFactory() {
+//        //sessionFactory = this.entityManager.unwrap(SessionFactory.class);
+//        return sessionFactory;
+//    }
 
     public void setCurrentTransaction(Transaction currentTransaction) {
         this.currentTransaction = currentTransaction;
@@ -49,10 +47,14 @@ public abstract class Dao<E, K extends Serializable> {
 
     public Session getCurrentSession() {
         if(currentSession==null)
-            currentSession = getSessionFactory().openSession();
+            currentSession = openSession();
         return currentSession;
     }
 
+//    @Autowired
+//    public void setSession(SessionFactory sessionFactory) {
+//        this.sessionFactory = sessionFactory;
+//    }
 
     abstract List<E> getAll();
 

@@ -37,7 +37,7 @@ public class EmployeeEntity {
 
     @NotNull
     @Column(name = "gender", nullable = false)
-    private String gender;
+    private Integer gender;
 
     @NotNull
     @Column(name = "birth_date", nullable = false)

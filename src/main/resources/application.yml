@@ -1,8 +1,13 @@
 spring:
+
     datasource:
         url: jdbc:sqlite:src/main/resources/database/employee-handbook.sqlite
         driver-class-name: org.sqlite.JDBC
+
     jpa:
+        properties:
+                    hibernate:
+                        current_session_context_class: org.springframework.orm.hibernate5.SpringSessionContext
         database-platform: com.enigmabridge.hibernate.dialect.SQLiteDialect
         hibernate:
             format_sql: true
