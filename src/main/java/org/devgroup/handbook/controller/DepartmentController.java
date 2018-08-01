@@ -14,4 +14,6 @@ public interface DepartmentController {
 
     Response reassignmentDepartment(Reassignment reassignmentRequest);
 
+    Response getListEmployeeOfDepartment(long id);
+
 }

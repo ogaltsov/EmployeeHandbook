@@ -15,6 +15,5 @@ public interface EmployeeController {
 
     Response removeEmployee(long id);
 
-    Response getListEmployeeOfDepartment(long id);
 
 }

@@ -126,6 +126,17 @@ public class DepartmentServiceImpl implements DepartmentService {
         return "success"; //todo: handle exception, return request(class)
     }
 
+    @Override
+    public List<EmployeeEntity> getListEmployeeOfDepartment(long id) {
+        CriteriaBuilder criteriaBuilder = employeeDao.openSession().getCriteriaBuilder();
+        CriteriaQuery<EmployeeEntity> criteriaQuery = criteriaBuilder.createQuery(EmployeeEntity.class);
+        Root<EmployeeEntity> employeeRoot = criteriaQuery.from(EmployeeEntity.class);
+        criteriaQuery.where(criteriaBuilder.equal(employeeRoot.get("department"), id));
+        List<EmployeeEntity> listOfEmployee = employeeDao.getWithCriteria(criteriaQuery).list();
+        employeeDao.closeSession();
+        return listOfEmployee;
+    }
+
 
 
 

@@ -2,6 +2,9 @@ package org.devgroup.handbook.service;
 
 import org.devgroup.handbook.dto.Request.CreateDepartment;
 import org.devgroup.handbook.dto.Request.Reassignment;
+import org.devgroup.handbook.entity.EmployeeEntity;
+
+import java.util.List;
 
 
 public interface DepartmentService {
@@ -13,6 +16,8 @@ public interface DepartmentService {
     String createDepartment(CreateDepartment createDepartmentRequest);
 
     String reassignmentDepartment(Reassignment reassignmentRequest);
+
+    List<EmployeeEntity> getListEmployeeOfDepartment(long id);
 
     //todo: merge other methods from "DBaranov"
 }

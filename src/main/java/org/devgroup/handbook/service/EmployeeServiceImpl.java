@@ -127,16 +127,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         return "success";
     }
 
-    @Override
-    public List<EmployeeEntity> getListEmployeeOfDepartment(long id) {
-        CriteriaBuilder criteriaBuilder = employeeDao.openSession().getCriteriaBuilder();
-        CriteriaQuery<EmployeeEntity> criteriaQuery = criteriaBuilder.createQuery(EmployeeEntity.class);
-        Root<EmployeeEntity> employeeRoot = criteriaQuery.from(EmployeeEntity.class);
-        criteriaQuery.where(criteriaBuilder.equal(employeeRoot.get("department"), id));
-        List<EmployeeEntity> listOfEmployee = employeeDao.getWithCriteria(criteriaQuery).list();
-        employeeDao.closeSession();
-        return listOfEmployee;
-    }
+
 
     @Autowired
     public void setEmployeeDao(EmployeeDao employeeDao) {

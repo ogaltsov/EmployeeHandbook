@@ -4,19 +4,24 @@ import org.devgroup.handbook.dto.Request.ChangeEmployee;
 import org.devgroup.handbook.dto.Request.CreateEmployee;
 import org.devgroup.handbook.dto.Request.TransferEmployee;
 import org.devgroup.handbook.dto.Response.Response;
-import org.devgroup.handbook.entity.EmployeeEntity;
 import org.devgroup.handbook.exception.MyException;
 import org.devgroup.handbook.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
+import javax.validation.constraints.Positive;
 
 @RestController
 public class EmployeeControllerImpl implements EmployeeController {
 
     private EmployeeService employeeService;
+
+    @Autowired
+    public void setEmployeeService(EmployeeService employeeService) {
+        this.employeeService = employeeService;
+    }
+
 
     @RequestMapping(value = "/addEmployee", method = RequestMethod.POST)
     public Response createEmployee(@Valid @RequestBody CreateEmployee createEmployeeRequest) {
@@ -69,7 +74,7 @@ public class EmployeeControllerImpl implements EmployeeController {
     }
 
     @RequestMapping(value = "/removeEmployee", method = RequestMethod.DELETE)
-    public Response removeEmployee(@RequestParam(value = "id") long id) {
+    public Response removeEmployee(@RequestParam(value = "id") @Positive long id) {
         try {
             String answer = employeeService.removeEmployee(id);
             return Response.builder()
@@ -83,22 +88,20 @@ public class EmployeeControllerImpl implements EmployeeController {
 
     }
 
-    @RequestMapping(value = "/getListEmployeeOfDepartment", method = RequestMethod.GET)
-    public Response getListEmployeeOfDepartment(@RequestParam(value = "id") long id) {
-        try {
-            List<EmployeeEntity> listEmployeeOfDepartment = employeeService.getListEmployeeOfDepartment(id);
-            return Response.<EmployeeEntity>builder()
-                    .list(listEmployeeOfDepartment)
-                    .build();
-        } catch (MyException e) {
-            return Response.<EmployeeEntity>builder()
-                    .message(e.getResponse().getErrorCode() + e.getResponse().getErrorMessage())
-                    .build();
-        }
+    @ExceptionHandler(NumberFormatException.class)
+    public Response handleNumberFormatExc(){
+        return Response.builder()
+                .message("Incorrect type of input")
+                .build();
     }
 
-    @Autowired
-    public void setEmployeeService(EmployeeService employeeService) {
-        this.employeeService = employeeService;
+    @ExceptionHandler(IllegalArgumentException.class)
+    public Response handleIllegalArgExc(Exception e){
+
+        return Response.builder()
+                .message("Incorrect type of input; ")
+                .build();
     }
+
+
 }
