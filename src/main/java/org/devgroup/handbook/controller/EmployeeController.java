@@ -13,7 +13,7 @@ public interface EmployeeController {
 
     Response changeEmployee(ChangeEmployee changeEmployeeRequest);
 
-    Response removeEmployee(long id);
+    Response removeEmployee(Long id);
 
 
 }

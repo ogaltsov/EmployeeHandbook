@@ -51,11 +51,6 @@ public abstract class Dao<E, K extends Serializable> {
         return currentSession;
     }
 
-//    @Autowired
-//    public void setSession(SessionFactory sessionFactory) {
-//        this.sessionFactory = sessionFactory;
-//    }
-
     abstract List<E> getAll();
 
     abstract E getEntityById(K id);

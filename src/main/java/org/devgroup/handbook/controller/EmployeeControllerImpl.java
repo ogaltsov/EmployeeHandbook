@@ -55,7 +55,7 @@ public class EmployeeControllerImpl implements EmployeeController {
     }
 
     @RequestMapping(value = "/changeEmployee", method = RequestMethod.PUT)  //method work correct
-    public Response changeEmployee(@RequestBody ChangeEmployee changeEmployeeRequest) {
+    public Response changeEmployee(@Valid @RequestBody ChangeEmployee changeEmployeeRequest) {
         try {
             if (changeEmployeeRequest.isCorrect()) {
                 String answer = employeeService.changeEmployee(changeEmployeeRequest);
@@ -74,7 +74,7 @@ public class EmployeeControllerImpl implements EmployeeController {
     }
 
     @RequestMapping(value = "/removeEmployee", method = RequestMethod.DELETE)
-    public Response removeEmployee(@Valid @RequestParam(value = "id") @Positive long id) {
+    public Response removeEmployee(@Valid @RequestParam(value = "id") @Positive Long id) { //todo: validation not working
         try {
             String answer = employeeService.removeEmployee(id);
             return Response.builder()
@@ -88,22 +88,26 @@ public class EmployeeControllerImpl implements EmployeeController {
 
     }
 
+    //required: number, found: smth else
     @ExceptionHandler(NumberFormatException.class)
-    public Response handleNumberFormatExc(){
+    public Response handleNumberFormatExc(NumberFormatException e){
+        e.printStackTrace();
         return Response.builder()
                 .message("Incorrect type of input")
                 .build();
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public Response handleIllegalArgExc(){
+    public Response handleIllegalArgExc(Exception e){
+        e.printStackTrace();
         return Response.builder()
                 .message("Incorrect type of input")
                 .build();
     }
 
     @ExceptionHandler(ValidationException.class)
-    public Response handleValidationException(){
+    public Response handleValidationException(Exception e){
+        e.printStackTrace();
         return Response.builder()
                 .message("Incorrect type of input")
                 .build();
