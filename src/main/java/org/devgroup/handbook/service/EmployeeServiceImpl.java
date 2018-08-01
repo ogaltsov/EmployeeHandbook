@@ -14,11 +14,6 @@ import org.devgroup.handbook.exception.ResponseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import java.util.List;
-
 public class EmployeeServiceImpl implements EmployeeService {
 
     private EmployeeDao employeeDao;
@@ -33,9 +28,13 @@ public class EmployeeServiceImpl implements EmployeeService {
             DepartmentEntity department = departmentDao.getEntityById(createEmployeeRequest.getIdDepartment());
             PositionEntity position = positionDao.getEntityById(createEmployeeRequest.getIdPosition());
 
-            if(department==null || position==null){
-                throw new NullPointerException();
+            if(department==null){
+                throw new MyException(ResponseException.DEPARTMENT_NOT_EXIST);
             }
+            if(position==null){
+                throw new MyException(ResponseException.POSITION_NOT_EXIST);
+            }
+
 
             EmployeeEntity employee = EmployeeEntity.builder()
                     .name(createEmployeeRequest.getName())
@@ -61,10 +60,6 @@ public class EmployeeServiceImpl implements EmployeeService {
             e.printStackTrace();
             ///////////////////  todo: fix exceptions
             throw new MyException(ResponseException.FILE_NOT_FOUND);
-        } catch (Exception e){
-            e.printStackTrace();
-            /////////////////   todo: fix exceptions
-            throw new MyException(ResponseException.FILE_NOT_FOUND);
         } finally {
             employeeDao.closeSession();
         }
@@ -78,15 +73,16 @@ public class EmployeeServiceImpl implements EmployeeService {
             EmployeeEntity employee = employeeDao.getEntityById(transferEmployeeRequest.getEmployeeId());
             DepartmentEntity department = departmentDao.getEntityById(transferEmployeeRequest.getDepIdTo());
 
-            if(employee==null || department==null){
-                throw new NullPointerException();
-            }
+            if(employee==null)
+                throw new MyException(ResponseException.EMPLOYEE_NOT_EXIST);
+            if(department==null)
+                throw  new MyException(ResponseException.DEPARTMENT_NOT_EXIST);
 
             employee.setDepartment(department);
             employeeDao.update(employee);
             employeeDao.getCurrentSession().getTransaction().commit();
             employeeDao.closeSession();
-            return "successful";  //todo: return answer from dao, exc
+            return "Transfer was complete successful";
         } catch (NullPointerException e){
             e.printStackTrace();
             ////////////////////   todo: fix exceptions
@@ -101,30 +97,47 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         EmployeeEntity employee = employeeDao.getEntityById(changeEmployeeRequest.getEmployeeId());
 
+        if(employee==null)
+            throw new MyException(ResponseException.EMPLOYEE_NOT_EXIST);
+
         if(changeEmployeeRequest.getGrade()!=null)
             employee.setGrade(changeEmployeeRequest.getGrade());
+
         if(changeEmployeeRequest.getSalary()!=null)
             employee.setSalary(changeEmployeeRequest.getSalary());
 
         if(changeEmployeeRequest.getPositionId()!=null) {
             PositionEntity position = positionDao.getEntityById(changeEmployeeRequest.getPositionId());
+            if(position==null)
+                throw new MyException(ResponseException.POSITION_NOT_EXIST);
             employee.setPosition(position);
-
-
         }
 
-        employeeDao.getCurrentSession().saveOrUpdate(employee);
+        employeeDao.getCurrentSession().update(employee);
         employeeDao.getCurrentSession().getTransaction().commit();
         employeeDao.closeSession();
-        return "success";
+        return "Changes was completed successful";
     }
 
     public String removeEmployee(long id) {
-        employeeDao.openSession().beginTransaction();
-        employeeDao.delete(id);
-        employeeDao.getCurrentSession().getTransaction().commit();
-        employeeDao.closeSession();
-        return "success";
+        try {
+            employeeDao.openSession().beginTransaction();
+            EmployeeEntity employee = employeeDao.getEntityById(id);
+
+            if (employee == null)
+                throw new MyException(ResponseException.EMPLOYEE_NOT_EXIST);
+
+            employeeDao.delete(employee);
+            employeeDao.getCurrentSession().getTransaction().commit();
+            employeeDao.closeSession();
+            return "Employee was removed successful";
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            ///////////////// todo fix exc
+            throw new MyException(ResponseException.FILE_NOT_FOUND);
+        } finally {
+            employeeDao.closeSession();
+        }
     }
 
 

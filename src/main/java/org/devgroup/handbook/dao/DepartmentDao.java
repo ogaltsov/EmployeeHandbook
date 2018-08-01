@@ -29,8 +29,7 @@ public class DepartmentDao extends Dao<DepartmentEntity, Long> {
 
     @Override
     @Transactional
-    public void delete(Long id) {
-        DepartmentEntity department = getEntityById(id);
+    public void delete(DepartmentEntity department) {
         getCurrentSession().delete(department);
     }
 

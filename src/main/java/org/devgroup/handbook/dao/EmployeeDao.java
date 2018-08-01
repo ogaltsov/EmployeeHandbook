@@ -27,8 +27,7 @@ public class EmployeeDao extends Dao<EmployeeEntity, Long> {
     }
 
     @Override
-    public void delete(Long id) {
-        EmployeeEntity employee = getEntityById(id);
+    public void delete(EmployeeEntity employee) {
         getCurrentSession().delete(employee);
     }
 

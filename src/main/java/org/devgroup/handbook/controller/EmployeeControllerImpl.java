@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.ValidationException;
 import javax.validation.constraints.Positive;
 
 @RestController
@@ -26,7 +27,6 @@ public class EmployeeControllerImpl implements EmployeeController {
     @RequestMapping(value = "/addEmployee", method = RequestMethod.POST)
     public Response createEmployee(@Valid @RequestBody CreateEmployee createEmployeeRequest) {
         try {
-            System.out.println(createEmployeeRequest);/////////
             String answer = employeeService.createEmployee(createEmployeeRequest);
             return Response.builder()
                     .message(answer)
@@ -74,7 +74,7 @@ public class EmployeeControllerImpl implements EmployeeController {
     }
 
     @RequestMapping(value = "/removeEmployee", method = RequestMethod.DELETE)
-    public Response removeEmployee(@RequestParam(value = "id") @Positive long id) {
+    public Response removeEmployee(@Valid @RequestParam(value = "id") @Positive long id) {
         try {
             String answer = employeeService.removeEmployee(id);
             return Response.builder()
@@ -96,10 +96,16 @@ public class EmployeeControllerImpl implements EmployeeController {
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public Response handleIllegalArgExc(Exception e){
-
+    public Response handleIllegalArgExc(){
         return Response.builder()
-                .message("Incorrect type of input; ")
+                .message("Incorrect type of input")
+                .build();
+    }
+
+    @ExceptionHandler(ValidationException.class)
+    public Response handleValidationException(){
+        return Response.builder()
+                .message("Incorrect type of input")
                 .build();
     }
 

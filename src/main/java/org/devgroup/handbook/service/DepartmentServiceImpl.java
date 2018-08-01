@@ -6,6 +6,8 @@ import org.devgroup.handbook.dto.Request.CreateDepartment;
 import org.devgroup.handbook.dto.Request.Reassignment;
 import org.devgroup.handbook.entity.DepartmentEntity;
 import org.devgroup.handbook.entity.EmployeeEntity;
+import org.devgroup.handbook.exception.MyException;
+import org.devgroup.handbook.exception.ResponseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,46 +31,58 @@ public class DepartmentServiceImpl implements DepartmentService {
         Long countOfEmployee;
         Long countOfDep;
 
-        //build CriteriaQuery to check if department have employees, likewise SQL query:
-        //select count(*) from employee where department_id = ...
-        employeeDao.openSession();
-        {
-            CriteriaBuilder criteriaBuilder = employeeDao.getCurrentSession().getCriteriaBuilder();
-            CriteriaQuery<Long> countEmployeeQuery = criteriaBuilder.createQuery(Long.class);
-            Root<EmployeeEntity> employeeRoot = countEmployeeQuery.from(EmployeeEntity.class);
-            countEmployeeQuery.select(criteriaBuilder.count(employeeRoot));
-            countEmployeeQuery.where(criteriaBuilder.equal(employeeRoot.get("department"), id));
-            countOfEmployee = employeeDao.getWithCriteria(countEmployeeQuery).getSingleResult();
+        try {
+            //build CriteriaQuery to check if department have employees, likewise SQL query:
+            //select count(*) from employee where department_id = ...
+            employeeDao.openSession();
+            {
+                CriteriaBuilder criteriaBuilder = employeeDao.getCurrentSession().getCriteriaBuilder();
+                CriteriaQuery<Long> countEmployeeQuery = criteriaBuilder.createQuery(Long.class);
+                Root<EmployeeEntity> employeeRoot = countEmployeeQuery.from(EmployeeEntity.class);
+                countEmployeeQuery.select(criteriaBuilder.count(employeeRoot));
+                countEmployeeQuery.where(criteriaBuilder.equal(employeeRoot.get("department"), id));
+                countOfEmployee = employeeDao.getWithCriteria(countEmployeeQuery).getSingleResult();
+            }
+            employeeDao.closeSession();
+
+            if (countOfEmployee != 0)
+                return "you cannot close dep, cause: it has employees";
+
+            //build CriteriaQuery to check if department have sub-departments, likewise SQL query:
+            //select count(*) from department where parent_department = ...
+            departmentDao.openSession();
+            {
+                CriteriaBuilder criteriaBuilder = departmentDao.getCurrentSession().getCriteriaBuilder();
+                CriteriaQuery<Long> countDepartmentQuery = criteriaBuilder.createQuery(Long.class);
+                Root<DepartmentEntity> depRoot = countDepartmentQuery.from(DepartmentEntity.class);
+                countDepartmentQuery.select(criteriaBuilder.count(depRoot));
+                countDepartmentQuery.where(criteriaBuilder.equal(depRoot.get("parentDepartment"), id));
+                countOfDep = departmentDao.getWithCriteria(countDepartmentQuery).getSingleResult();
+            }
+            departmentDao.closeSession();
+
+            if (countOfDep != 0)
+                return "you cannot close dep, cause: it has subDeps";
+
+            departmentDao.openSession().beginTransaction();
+            {
+                DepartmentEntity department = departmentDao.getEntityById(id);
+
+                if (department == null)
+                    throw new NullPointerException();
+
+                departmentDao.delete(department);
+            }
+            departmentDao.getCurrentSession().getTransaction().commit();
+            departmentDao.closeSession();
+
+            return "dep was deleted successfully";  //todo: handle exceptions(trans crushes), return request(class)
+        } catch (NullPointerException e){
+            e.printStackTrace();
+            throw new MyException(ResponseException.FILE_NOT_FOUND); //todo fix exc
+        } finally {
+            departmentDao.closeSession();
         }
-        employeeDao.closeSession();
-
-        if(countOfEmployee!=0)
-            return "you cannot close dep, cause: it has employees";
-
-        //build CriteriaQuery to check if department have sub-departments, likewise SQL query:
-        //select count(*) from department where parent_department = ...
-        departmentDao.openSession();
-        {
-            CriteriaBuilder criteriaBuilder = departmentDao.getCurrentSession().getCriteriaBuilder();
-            CriteriaQuery<Long> countDepartmentQuery = criteriaBuilder.createQuery(Long.class);
-            Root<DepartmentEntity> depRoot = countDepartmentQuery.from(DepartmentEntity.class);
-            countDepartmentQuery.select(criteriaBuilder.count(depRoot));
-            countDepartmentQuery.where(criteriaBuilder.equal(depRoot.get("parentDepartment"), id));
-            countOfDep = departmentDao.getWithCriteria(countDepartmentQuery).getSingleResult();
-        }
-        departmentDao.closeSession();
-
-        if(countOfDep!=0)
-            return "you cannot close dep, cause: it has subDeps";
-
-        departmentDao.openSession().beginTransaction();
-        {
-            departmentDao.delete(id);
-        }
-        departmentDao.getCurrentSession().getTransaction().commit();
-        departmentDao.closeSession();
-
-        return "dep was deleted successfully";  //todo: handle exceptions(trans crushes), return request(class)
     }
 
     @Override

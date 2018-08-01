@@ -62,7 +62,7 @@ public abstract class Dao<E, K extends Serializable> {
 
     abstract void update(E entity);
 
-    abstract void delete(K id);
+    abstract void delete(E entity);
 
     abstract void create(E entity);
 
