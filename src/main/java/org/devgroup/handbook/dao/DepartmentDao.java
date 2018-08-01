@@ -13,7 +13,7 @@ public class DepartmentDao extends Dao<DepartmentEntity, Long> {
 
     @Override
     public List<DepartmentEntity> getAll() {
-        return getCurrentSession().createQuery("from ???", DepartmentEntity.class).list();  //todo: replace ??? with name
+        return getCurrentSession().createQuery("from DepartmentEntity", DepartmentEntity.class).list();
     }
 
     @Override
