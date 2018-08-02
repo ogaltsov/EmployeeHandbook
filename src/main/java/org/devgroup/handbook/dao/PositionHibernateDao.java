@@ -8,7 +8,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 
 @Repository
-public class PositionDao extends Dao<PositionEntity,Long> {
+public class PositionHibernateDao extends GenericHibernateDao<PositionEntity,Long> {
 
     /////
     //todo: realize dao methods

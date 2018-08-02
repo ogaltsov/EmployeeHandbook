@@ -1,14 +1,16 @@
 package org.devgroup.handbook.controller;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import org.devgroup.handbook.dto.Request.ChangeEmployee;
 import org.devgroup.handbook.dto.Request.CreateEmployee;
+import org.devgroup.handbook.dto.Request.EntityIdRequestWrapper;
 import org.devgroup.handbook.dto.Request.TransferEmployee;
 import org.devgroup.handbook.dto.Response.Response;
 import org.devgroup.handbook.exception.MyException;
 import org.devgroup.handbook.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import javax.validation.ValidationException;
 import javax.validation.constraints.Positive;
@@ -64,7 +66,7 @@ public class EmployeeControllerImpl implements EmployeeController {
                         .build();
             }
             return Response.builder()
-                    .message("incorrect response")
+                    .message("Incorrect response: fields are empty")
                     .build();
         } catch (MyException e) {
             return Response.builder()
@@ -74,9 +76,9 @@ public class EmployeeControllerImpl implements EmployeeController {
     }
 
     @RequestMapping(value = "/removeEmployee", method = RequestMethod.DELETE)
-    public Response removeEmployee(@Valid @RequestParam(value = "id") @Positive Long id) { //todo: validation not working
+    public Response removeEmployee(@Valid @RequestBody @Positive EntityIdRequestWrapper id) {
         try {
-            String answer = employeeService.removeEmployee(id);
+            String answer = employeeService.removeEmployee(id.getId());
             return Response.builder()
                     .message(answer)
                     .build();
@@ -88,30 +90,12 @@ public class EmployeeControllerImpl implements EmployeeController {
 
     }
 
-    //required: number, found: smth else
-    @ExceptionHandler(NumberFormatException.class)
-    public Response handleNumberFormatExc(NumberFormatException e){
+    @ExceptionHandler({MethodArgumentNotValidException.class, NumberFormatException.class,
+            JsonParseException.class, ValidationException.class})
+    public Response handleNumberFormatExc(Exception e){
         e.printStackTrace();
         return Response.builder()
-                .message("Incorrect type of input")
+                .message("Incorrect type/format of incoming data")
                 .build();
     }
-
-    @ExceptionHandler(IllegalArgumentException.class)
-    public Response handleIllegalArgExc(Exception e){
-        e.printStackTrace();
-        return Response.builder()
-                .message("Incorrect type of input")
-                .build();
-    }
-
-    @ExceptionHandler(ValidationException.class)
-    public Response handleValidationException(Exception e){
-        e.printStackTrace();
-        return Response.builder()
-                .message("Incorrect type of input")
-                .build();
-    }
-
-
 }

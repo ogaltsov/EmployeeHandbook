@@ -19,25 +19,25 @@ public class CreateEmployee {
 
     @NotEmpty(message = "Field \"Name\" must not be empty")
     @Size(min = 2, max = 50, message = "\"Name\" length must be from 2 to 20")
-    @Pattern(regexp = "[a-zA-Z]", message = "Field \"Name\" must contain only latin letters")
+    //@Pattern(regexp = "[a-zA-Z]", message = "Field \"Name\" must contain only latin letters")
     private String name;
 
 
     @NotEmpty(message = "Field \"Surname\" must not be empty")
     @Size(min = 2, max = 20, message = "\"Surname\" length must be from 2 to 20")
-    @Pattern(regexp = "[a-zA-Z]", message = "Field \"Surname\" must contain only latin letters")
+    //@Pattern(regexp = "[a-zA-Z]", message = "Field \"Surname\" must contain only latin letters")
     private String surname;
 
 
     @Size(min = 2, max = 50, message = "\"Patronymic\" length must be from 2 to 20")
-    @Pattern(regexp = "[a-zA-Z]", message = "Field \"Patronymic\" must contain only latin letters")
+    //@Pattern(regexp = "[a-zA-Z]", message = "Field \"Patronymic\" must contain only latin letters")
     private String patronymic;
 
 
     @NotNull(message = "Field \"Gender\" must not be empty")
     @Min(value = 0, message = "Field \"Gender\" must not be 0 or 1")
     @Max(value = 1, message = "Field \"Gender\" must not be 0 or 1")
-    private Integer genderName;
+    private Integer gender;
 
 
     @NotNull(message = "Field \"Birth Date\" must not be empty\"")

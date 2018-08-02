@@ -1,7 +1,6 @@
 package org.devgroup.handbook.service;
 
-import org.devgroup.handbook.dao.DepartmentDao;
-import org.devgroup.handbook.dao.EmployeeDao;
+import org.devgroup.handbook.dao.GenericHibernateDao;
 import org.devgroup.handbook.dto.Request.CreateDepartment;
 import org.devgroup.handbook.dto.Request.Reassignment;
 import org.devgroup.handbook.entity.DepartmentEntity;
@@ -20,12 +19,11 @@ import java.util.List;
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
 
-    private DepartmentDao departmentDao;
-    private EmployeeDao employeeDao;
+    private GenericHibernateDao<EmployeeEntity,Long> employeeDao;
+    private GenericHibernateDao<DepartmentEntity,Long> departmentDao;
 
 
     @Override
-    @Transactional
     public String closeDepartment(long id) {
 
         Long countOfEmployee;
@@ -34,7 +32,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         try {
             //build CriteriaQuery to check if department have employees, likewise SQL query:
             //select count(*) from employee where department_id = ...
-            employeeDao.openSession();
+            departmentDao.openSession();
             {
                 CriteriaBuilder criteriaBuilder = employeeDao.getCurrentSession().getCriteriaBuilder();
                 CriteriaQuery<Long> countEmployeeQuery = criteriaBuilder.createQuery(Long.class);
@@ -43,14 +41,12 @@ public class DepartmentServiceImpl implements DepartmentService {
                 countEmployeeQuery.where(criteriaBuilder.equal(employeeRoot.get("department"), id));
                 countOfEmployee = employeeDao.getWithCriteria(countEmployeeQuery).getSingleResult();
             }
-            employeeDao.closeSession();
 
             if (countOfEmployee != 0)
                 return "you cannot close dep, cause: it has employees";
 
             //build CriteriaQuery to check if department have sub-departments, likewise SQL query:
             //select count(*) from department where parent_department = ...
-            departmentDao.openSession();
             {
                 CriteriaBuilder criteriaBuilder = departmentDao.getCurrentSession().getCriteriaBuilder();
                 CriteriaQuery<Long> countDepartmentQuery = criteriaBuilder.createQuery(Long.class);
@@ -59,20 +55,21 @@ public class DepartmentServiceImpl implements DepartmentService {
                 countDepartmentQuery.where(criteriaBuilder.equal(depRoot.get("parentDepartment"), id));
                 countOfDep = departmentDao.getWithCriteria(countDepartmentQuery).getSingleResult();
             }
-            departmentDao.closeSession();
 
             if (countOfDep != 0)
                 return "you cannot close dep, cause: it has subDeps";
 
-            departmentDao.openSession().beginTransaction();
-            {
-                DepartmentEntity department = departmentDao.getEntityById(id);
+            DepartmentEntity department = departmentDao.getEntityById(id);
 
-                if (department == null)
-                    throw new NullPointerException();
+            if (department == null)
+                throw new NullPointerException();
+
+            System.out.println(111);///////////////////////
+
+            departmentDao.getCurrentSession().beginTransaction();
 
                 departmentDao.delete(department);
-            }
+
             departmentDao.getCurrentSession().getTransaction().commit();
             departmentDao.closeSession();
 
@@ -81,7 +78,7 @@ public class DepartmentServiceImpl implements DepartmentService {
             e.printStackTrace();
             throw new MyException(ResponseException.FILE_NOT_FOUND); //todo fix exc
         } finally {
-            departmentDao.closeSession();
+            //departmentDao.closeSession();
         }
     }
 
@@ -155,11 +152,11 @@ public class DepartmentServiceImpl implements DepartmentService {
 
 
     @Autowired
-    public void setDepartmentDao(DepartmentDao departmentDao) {
+    public void setDepartmentDao(GenericHibernateDao<DepartmentEntity,Long> departmentDao) {
         this.departmentDao = departmentDao;
     }
     @Autowired
-    public void setEmployeeDao(EmployeeDao employeeDao) {
+    public void setEmployeeDao(GenericHibernateDao<EmployeeEntity,Long> employeeDao) {
         this.employeeDao = employeeDao;
     }
 }

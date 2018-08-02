@@ -9,7 +9,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 
 @Repository
-public class DepartmentDao extends Dao<DepartmentEntity, Long> {
+public class DepartmentHibernateDao extends GenericHibernateDao<DepartmentEntity, Long> {
 
     @Override
     public List<DepartmentEntity> getAll() {

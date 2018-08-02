@@ -1,14 +1,19 @@
 package org.devgroup.handbook.controller;
 
 import org.devgroup.handbook.dto.Request.CreateDepartment;
+import org.devgroup.handbook.dto.Request.EntityIdRequestWrapper;
 import org.devgroup.handbook.dto.Request.Reassignment;
 import org.devgroup.handbook.dto.Response.Response;
 import org.devgroup.handbook.entity.EmployeeEntity;
 import org.devgroup.handbook.exception.MyException;
 import org.devgroup.handbook.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -18,9 +23,9 @@ public class DepartmentControllerImpl implements DepartmentController {
 
 
     @RequestMapping(value = "/closeDepartment", method = RequestMethod.DELETE)
-    public Response closeDepartment(@RequestParam(value = "id") long id) {  //if have no param -> exception
+    public Response closeDepartment(@Valid @RequestBody EntityIdRequestWrapper id) {  //if have no param -> exception
         try {
-            String answer = departmentService.closeDepartment(id);
+            String answer = departmentService.closeDepartment(id.getId());
             return Response.builder()
                     .message(answer)
                     .build();
@@ -33,9 +38,9 @@ public class DepartmentControllerImpl implements DepartmentController {
     }
 
     @RequestMapping(value = "/searchListBranches", method = RequestMethod.GET)
-    public Response searchListBranches(@RequestParam(value = "id") long id) {
+    public Response searchListBranches(@Valid @RequestBody EntityIdRequestWrapper id) {
         try {
-            String answer = departmentService.searchListBranches(id);
+            String answer = departmentService.searchListBranches(id.getId());
             return Response.builder()
                     .message(answer)
                     .build();
@@ -46,7 +51,7 @@ public class DepartmentControllerImpl implements DepartmentController {
         }
     }
 
-    @Override
+    @Override  //todo: ?????
     public Response createDepartment(@RequestBody CreateDepartment createDepartmentRequest) {
         return null;
     }
@@ -66,9 +71,9 @@ public class DepartmentControllerImpl implements DepartmentController {
     }
 
     @RequestMapping(value = "/getListEmployeeOfDepartment", method = RequestMethod.GET)
-    public Response getListEmployeeOfDepartment(@RequestParam(value = "id") long id) {
+    public Response getListEmployeeOfDepartment(@Valid @RequestBody EntityIdRequestWrapper id) {
         try {
-            List<EmployeeEntity> listEmployeeOfDepartment = departmentService.getListEmployeeOfDepartment(id);
+            List<EmployeeEntity> listEmployeeOfDepartment = departmentService.getListEmployeeOfDepartment(id.getId());
             return Response.<EmployeeEntity>builder()
                     .list(listEmployeeOfDepartment)
                     .build();

@@ -2,6 +2,7 @@ package org.devgroup.handbook.controller;
 
 import org.devgroup.handbook.dto.Request.ChangeEmployee;
 import org.devgroup.handbook.dto.Request.CreateEmployee;
+import org.devgroup.handbook.dto.Request.EntityIdRequestWrapper;
 import org.devgroup.handbook.dto.Response.Response;
 import org.devgroup.handbook.dto.Request.TransferEmployee;
 
@@ -13,7 +14,5 @@ public interface EmployeeController {
 
     Response changeEmployee(ChangeEmployee changeEmployeeRequest);
 
-    Response removeEmployee(Long id);
-
-
+    Response removeEmployee(EntityIdRequestWrapper entityIdRequestWrapper);
 }

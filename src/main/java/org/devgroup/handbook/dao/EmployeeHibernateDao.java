@@ -9,7 +9,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 
 @Repository
-public class EmployeeDao extends Dao<EmployeeEntity, Long> {
+public class EmployeeHibernateDao extends GenericHibernateDao<EmployeeEntity, Long> {
 
     @Override
     public List<EmployeeEntity> getAll() {
