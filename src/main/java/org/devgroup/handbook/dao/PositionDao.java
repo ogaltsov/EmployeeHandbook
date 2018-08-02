@@ -1,19 +1,27 @@
 package org.devgroup.handbook.dao;
 
 import org.devgroup.handbook.entity.PositionEntity;
-import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 
 @Repository
-public class PositionHibernateDao extends GenericHibernateDao<PositionEntity,Long> {
+public class PositionDao implements EntityDao<PositionEntity,Long> {
 
     /////
     //todo: realize dao methods
     /////
 
+    private final EntityManager entityManager;
+
+    @Autowired
+    public PositionDao(EntityManager entityManager){
+        this.entityManager = entityManager;
+    }
 
 
     @Override
@@ -23,7 +31,7 @@ public class PositionHibernateDao extends GenericHibernateDao<PositionEntity,Lon
 
     @Override
     public PositionEntity getEntityById(Long id) {
-        return getCurrentSession().get(PositionEntity.class, id);
+        return entityManager.find(PositionEntity.class, id);
     }
 
     @Override
@@ -42,7 +50,7 @@ public class PositionHibernateDao extends GenericHibernateDao<PositionEntity,Lon
     }
 
     @Override
-    public <T> Query<T> getWithCriteria(CriteriaQuery<T> criteriaQuery) {
+    public <T> TypedQuery<T> getWithCriteria(CriteriaQuery<T> criteriaQuery) {
         return null;
     }
 }

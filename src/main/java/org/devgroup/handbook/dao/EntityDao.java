@@ -1,12 +1,11 @@
 package org.devgroup.handbook.dao;
 
-import org.hibernate.query.Query;
-
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import java.io.Serializable;
 import java.util.List;
 
-public interface GenericDao<E, K extends Serializable>  {
+public interface EntityDao<E, K extends Serializable>  {
     List<E> getAll();
 
     E getEntityById(K id);
@@ -17,5 +16,5 @@ public interface GenericDao<E, K extends Serializable>  {
 
     void create(E entity);
 
-    <T> Query<T> getWithCriteria(CriteriaQuery<T> criteriaQuery);
+    <T> TypedQuery<T> getWithCriteria(CriteriaQuery<T> criteriaQuery);
 }

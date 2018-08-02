@@ -1,8 +1,8 @@
 package org.devgroup.handbook.service;
 
-import org.devgroup.handbook.dao.DepartmentHibernateDao;
-import org.devgroup.handbook.dao.EmployeeHibernateDao;
-import org.devgroup.handbook.dao.PositionHibernateDao;
+import org.devgroup.handbook.dao.DepartmentDao;
+import org.devgroup.handbook.dao.EmployeeDao;
+import org.devgroup.handbook.dao.PositionDao;
 import org.devgroup.handbook.dto.Request.ChangeEmployee;
 import org.devgroup.handbook.dto.Request.CreateEmployee;
 import org.devgroup.handbook.dto.Request.TransferEmployee;
@@ -16,17 +16,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 public class EmployeeServiceImpl implements EmployeeService {
 
-    private EmployeeHibernateDao employeeHibernateDao;
-    private DepartmentHibernateDao departmentHibernateDao; //todo: edit diff dao's as interface
-    private PositionHibernateDao positionHibernateDao;
+    private EmployeeDao employeeDao;
+    private DepartmentDao departmentDao; //todo: edit diff dao's as interface
+    private PositionDao positionDao;
 
     @Transactional
     public String createEmployee(CreateEmployee createEmployeeRequest) {
         try {
-            employeeHibernateDao.openSession();
 
-            DepartmentEntity department = departmentHibernateDao.getEntityById(createEmployeeRequest.getIdDepartment());
-            PositionEntity position = positionHibernateDao.getEntityById(createEmployeeRequest.getIdPosition());
+            DepartmentEntity department = departmentDao.getEntityById(createEmployeeRequest.getIdDepartment());
+            PositionEntity position = positionDao.getEntityById(createEmployeeRequest.getIdPosition());
 
             if(department==null){
                 throw new MyException(ResponseException.DEPARTMENT_NOT_EXIST);
@@ -48,9 +47,8 @@ public class EmployeeServiceImpl implements EmployeeService {
                     .salary(createEmployeeRequest.getSalary())
                     .build();
 
-            employeeHibernateDao.create(employee);
+            employeeDao.create(employee);
 
-            employeeHibernateDao.closeSession();
             return "Employee was created successfully";
         } catch (IllegalArgumentException e){
             e.printStackTrace();
@@ -61,17 +59,15 @@ public class EmployeeServiceImpl implements EmployeeService {
             ///////////////////  todo: fix exceptions
             throw new MyException(ResponseException.FILE_NOT_FOUND);
         } finally {
-            employeeHibernateDao.closeSession();
         }
     }
 
     public String transferEmployee(TransferEmployee transferEmployeeRequest) {
         try {
-            employeeHibernateDao.openSession();
-            employeeHibernateDao.getCurrentSession().beginTransaction();
 
-            EmployeeEntity employee = employeeHibernateDao.getEntityById(transferEmployeeRequest.getEmployeeId());
-            DepartmentEntity department = departmentHibernateDao.getEntityById(transferEmployeeRequest.getDepIdTo());
+
+            EmployeeEntity employee = employeeDao.getEntityById(transferEmployeeRequest.getEmployeeId());
+            DepartmentEntity department = departmentDao.getEntityById(transferEmployeeRequest.getDepIdTo());
 
             if(employee==null)
                 throw new MyException(ResponseException.EMPLOYEE_NOT_EXIST);
@@ -79,9 +75,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 throw  new MyException(ResponseException.DEPARTMENT_NOT_EXIST);
 
             employee.setDepartment(department);
-            employeeHibernateDao.update(employee);
-            employeeHibernateDao.getCurrentSession().getTransaction().commit();
-            employeeHibernateDao.closeSession();
+            employeeDao.update(employee);
             return "Transfer was complete successful";
         } catch (NullPointerException e){
             e.printStackTrace();
@@ -92,10 +86,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 
     public String changeEmployee(ChangeEmployee changeEmployeeRequest) {
-        employeeHibernateDao.openSession();
-        employeeHibernateDao.getCurrentSession().beginTransaction();
 
-        EmployeeEntity employee = employeeHibernateDao.getEntityById(changeEmployeeRequest.getEmployeeId());
+
+        EmployeeEntity employee = employeeDao.getEntityById(changeEmployeeRequest.getEmployeeId());
 
         if(employee==null)
             throw new MyException(ResponseException.EMPLOYEE_NOT_EXIST);
@@ -107,32 +100,26 @@ public class EmployeeServiceImpl implements EmployeeService {
             employee.setSalary(changeEmployeeRequest.getSalary());
 
         if(changeEmployeeRequest.getPositionId()!=null) {
-            PositionEntity position = positionHibernateDao.getEntityById(changeEmployeeRequest.getPositionId());
+            PositionEntity position = positionDao.getEntityById(changeEmployeeRequest.getPositionId());
             if(position==null)
                 throw new MyException(ResponseException.POSITION_NOT_EXIST);
             employee.setPosition(position);
         }
 
-        employeeHibernateDao.getCurrentSession().update(employee);
-        employeeHibernateDao.getCurrentSession().getTransaction().commit();
-        employeeHibernateDao.closeSession();
+        employeeDao.update(employee);
+
         return "Changes was completed successful";
     }
 
     public String removeEmployee(long id) {
         try {
-            employeeHibernateDao.openSession().beginTransaction();
-            //\\
-            System.out.println(id);
-            ////
-            EmployeeEntity employee = employeeHibernateDao.getEntityById(id);
+            EmployeeEntity employee = employeeDao.getEntityById(id);
 
             if (employee == null)
                 throw new MyException(ResponseException.EMPLOYEE_NOT_EXIST);
 
-            employeeHibernateDao.delete(employee);
-            employeeHibernateDao.getCurrentSession().getTransaction().commit();
-            employeeHibernateDao.closeSession();
+            employeeDao.delete(employee);
+
             return "Employee was removed successful";
         } catch (NullPointerException e) {
             e.printStackTrace();
@@ -146,15 +133,15 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 
     @Autowired
-    public void setEmployeeHibernateDao(EmployeeHibernateDao employeeHibernateDao) {
-        this.employeeHibernateDao = employeeHibernateDao;
+    public void setEmployeeDao(EmployeeDao employeeDao) {
+        this.employeeDao = employeeDao;
     }
     @Autowired
-    public void setDepartmentHibernateDao(DepartmentHibernateDao departmentHibernateDao) {
-        this.departmentHibernateDao = departmentHibernateDao;
+    public void setDepartmentDao(DepartmentDao departmentDao) {
+        this.departmentDao = departmentDao;
     }
     @Autowired
-    public void setPositionHibernateDao(PositionHibernateDao positionHibernateDao) {
-        this.positionHibernateDao = positionHibernateDao;
+    public void setPositionDao(PositionDao positionDao) {
+        this.positionDao = positionDao;
     }
 }
