@@ -11,7 +11,13 @@ import org.springframework.validation.beanvalidation.MethodValidationPostProcess
 
 @EnableJpaRepositories
 @SpringBootApplication
-@PropertySource({"classpath:application.yml"})
+@PropertySource({"classpath:application.yml"}) //delete?
+
+
+        //todo: all create operations must return id
+
+
+
 
 public class Main {
 

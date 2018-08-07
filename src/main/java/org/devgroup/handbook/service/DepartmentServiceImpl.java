@@ -70,11 +70,9 @@ public class DepartmentServiceImpl implements DepartmentService {
             if (department == null)
                 throw new NullPointerException();
 
-
-                departmentDao.delete(department);
-
-
+            departmentDao.delete(department);
             return "dep was deleted successfully";  //todo: handle exceptions(trans crushes), return request(class)
+
         } catch (NullPointerException e){
             e.printStackTrace();
             throw new MyException(ResponseException.FILE_NOT_FOUND); //todo fix exc
@@ -86,7 +84,6 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public String searchListBranches(long id) {
         List<DepartmentEntity> listOfDepartment;
-
         {
             CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
             CriteriaQuery<DepartmentEntity> departmentQuery = criteriaBuilder.createQuery(DepartmentEntity.class);

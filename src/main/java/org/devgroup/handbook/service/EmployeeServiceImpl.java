@@ -62,6 +62,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
     }
 
+    @Transactional
     public String transferEmployee(TransferEmployee transferEmployeeRequest) {
         try {
 
@@ -84,7 +85,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
     }
 
-
+    @Transactional
     public String changeEmployee(ChangeEmployee changeEmployeeRequest) {
 
 
@@ -111,6 +112,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         return "Changes was completed successful";
     }
 
+    @Transactional
     public String removeEmployee(long id) {
         try {
             EmployeeEntity employee = employeeDao.getEntityById(id);
