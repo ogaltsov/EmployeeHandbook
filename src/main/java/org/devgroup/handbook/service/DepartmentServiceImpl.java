@@ -5,7 +5,7 @@ import org.devgroup.handbook.dto.Request.CreateDepartment;
 import org.devgroup.handbook.dto.Request.Reassignment;
 import org.devgroup.handbook.entity.DepartmentEntity;
 import org.devgroup.handbook.entity.EmployeeEntity;
-import org.devgroup.handbook.exception.MyException;
+import org.devgroup.handbook.exception.EmployeeHandbookException;
 import org.devgroup.handbook.exception.ResponseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -68,14 +68,14 @@ public class DepartmentServiceImpl implements DepartmentService {
             DepartmentEntity department = departmentDao.getEntityById(id);
 
             if (department == null)
-                throw new NullPointerException();
+                throw new EmployeeHandbookException(ResponseException.DEPARTMENT_NOT_EXIST);
 
             departmentDao.delete(department);
-            return "dep was deleted successfully";  //todo: handle exceptions(trans crushes), return request(class)
+            return "dep was deleted successfully";  //todo: handle exceptions(trans crushes)
 
         } catch (NullPointerException e){
             e.printStackTrace();
-            throw new MyException(ResponseException.FILE_NOT_FOUND); //todo fix exc
+            throw new EmployeeHandbookException(ResponseException.FILE_NOT_FOUND); //todo fix exc
         } finally {
             //departmentDao.closeSession();
         }
@@ -107,9 +107,9 @@ public class DepartmentServiceImpl implements DepartmentService {
                 .name(createDepRequest.getName())
                 .build();
 
-        departmentDao.create(newDepartment);
+        departmentDao.create(newDepartment); //todo: exc если уже существует(как?)
 
-        return "success";  //todo: handle exception(if transaction crushes, ), return request(class)
+        return "success";  //todo: handle exception(if transaction crushes)
     }
 
     @Override

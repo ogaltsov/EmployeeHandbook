@@ -6,7 +6,7 @@ import org.devgroup.handbook.dto.Request.CreateEmployee;
 import org.devgroup.handbook.dto.Request.EntityIdRequestWrapper;
 import org.devgroup.handbook.dto.Request.TransferEmployee;
 import org.devgroup.handbook.dto.Response.Response;
-import org.devgroup.handbook.exception.MyException;
+import org.devgroup.handbook.exception.EmployeeHandbookException;
 import org.devgroup.handbook.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -33,7 +33,7 @@ public class EmployeeControllerImpl implements EmployeeController {
             return Response.builder()
                     .message(answer)
                     .build();
-        } catch (MyException e) {
+        } catch (EmployeeHandbookException e) {
             return Response.builder()
                     .message(e.getResponse().getErrorCode() + e.getResponse().getErrorMessage())
                     .build();
@@ -48,7 +48,7 @@ public class EmployeeControllerImpl implements EmployeeController {
             return Response.builder()
                     .message(answer)
                     .build();
-        } catch (MyException e) {
+        } catch (EmployeeHandbookException e) {
             return Response.builder()
                     .message(e.getResponse().getErrorCode() + e.getResponse().getErrorMessage())
                     .build();
@@ -68,7 +68,7 @@ public class EmployeeControllerImpl implements EmployeeController {
             return Response.builder()
                     .message("Incorrect response: fields are empty")
                     .build();
-        } catch (MyException e) {
+        } catch (EmployeeHandbookException e) {
             return Response.builder()
                     .message(e.getResponse().getErrorCode() + e.getResponse().getErrorMessage())
                     .build();
@@ -82,7 +82,7 @@ public class EmployeeControllerImpl implements EmployeeController {
             return Response.builder()
                     .message(answer)
                     .build();
-        } catch (MyException e) {
+        } catch (EmployeeHandbookException e) {
             return Response.builder()
                     .message(e.getResponse().getErrorCode() + e.getResponse().getErrorMessage())
                     .build();

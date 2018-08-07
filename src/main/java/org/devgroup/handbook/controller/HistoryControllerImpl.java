@@ -1,7 +1,7 @@
 //package org.devgroup.handbook.controller;
 //
 //import org.devgroup.handbook.dto.Response.Response;
-//import org.devgroup.handbook.exception.MyException;
+//import org.devgroup.handbook.exception.EmployeeHandbookException;
 //import org.devgroup.handbook.service.HistoryService;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +22,7 @@
 //            return Response.builder()
 //                    .message(answer)
 //                    .build();
-//        } catch (MyException e) {
+//        } catch (EmployeeHandbookException e) {
 //            return Response.builder()
 //                    .message(e.getResponse().getErrorCode() + e.getResponse().getErrorMessage())
 //                    .build();

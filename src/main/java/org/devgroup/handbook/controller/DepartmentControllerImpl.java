@@ -5,7 +5,7 @@ import org.devgroup.handbook.dto.Request.EntityIdRequestWrapper;
 import org.devgroup.handbook.dto.Request.Reassignment;
 import org.devgroup.handbook.dto.Response.Response;
 import org.devgroup.handbook.entity.EmployeeEntity;
-import org.devgroup.handbook.exception.MyException;
+import org.devgroup.handbook.exception.EmployeeHandbookException;
 import org.devgroup.handbook.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,7 +29,7 @@ public class DepartmentControllerImpl implements DepartmentController {
             return Response.builder()
                     .message(answer)
                     .build();
-        } catch (MyException e) {
+        } catch (EmployeeHandbookException e) {
             return Response.builder()
                     .message(e.getResponse().getErrorCode() + e.getResponse().getErrorMessage())
                     .build();
@@ -44,7 +44,7 @@ public class DepartmentControllerImpl implements DepartmentController {
             return Response.builder()
                     .message(answer)
                     .build();
-        } catch (MyException e) {
+        } catch (EmployeeHandbookException e) {
             return Response.builder()
                     .message(e.getResponse().getErrorCode() + e.getResponse().getErrorMessage())
                     .build();
@@ -63,7 +63,7 @@ public class DepartmentControllerImpl implements DepartmentController {
             return Response.builder()
                     .message(answer)
                     .build();
-        } catch (MyException e) {
+        } catch (EmployeeHandbookException e) {
             return Response.builder()
                     .message(e.getResponse().getErrorCode() + e.getResponse().getErrorMessage())
                     .build();
@@ -77,7 +77,7 @@ public class DepartmentControllerImpl implements DepartmentController {
             return Response.<EmployeeEntity>builder()
                     .list(listEmployeeOfDepartment)
                     .build();
-        } catch (MyException e) {
+        } catch (EmployeeHandbookException e) {
             return Response.<EmployeeEntity>builder()
                     .message(e.getResponse().getErrorCode() + e.getResponse().getErrorMessage())
                     .build();

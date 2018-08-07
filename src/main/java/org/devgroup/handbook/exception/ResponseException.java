@@ -7,15 +7,11 @@ import lombok.*;
 @AllArgsConstructor
 public enum ResponseException {
 
-    FILE_NOT_FOUND(1001, ""),
-    INVALID_INPUT_DATA(1002, ""),
-    RESULT_FILE_NOT_FOUND(1003, ""),
-    UNSUPPORTED_ENCODING_EXCEPTION(1004, ""),
-    INTERRUPTEDEXCEPTION(1005, ""),
-    NUMBER_FORMAT_EXCEPTION(1006, ""),
-    EMPLOYEE_NOT_EXIST(1007, "Такого сотрудника не существует"),
-    DEPARTMENT_NOT_EXIST(1008, "Такого департамента не существует"),
-    POSITION_NOT_EXIST(1009, "Такой должности не существует");
+    INCORRECT_TYPE_OF_INPUT_DATA    (1001, "Введены некоректные данные"),
+    EMPLOYEE_NOT_EXIST              (1002, "Такого сотрудника не существует"),
+    DEPARTMENT_NOT_EXIST            (1003, "Такого департамента не существует"),
+    POSITION_NOT_EXIST              (1004, "Такой должности не существует"),
+    FILE_NOT_FOUND                  (1000, "Заглушка");
 
 
     private int errorCode;

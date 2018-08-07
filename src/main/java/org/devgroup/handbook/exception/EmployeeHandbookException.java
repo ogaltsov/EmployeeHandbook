@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class MyException extends RuntimeException {
+public class EmployeeHandbookException extends RuntimeException {
 
     private ResponseException response;
 

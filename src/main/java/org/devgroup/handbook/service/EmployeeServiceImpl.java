@@ -9,12 +9,10 @@ import org.devgroup.handbook.dto.Request.TransferEmployee;
 import org.devgroup.handbook.entity.DepartmentEntity;
 import org.devgroup.handbook.entity.EmployeeEntity;
 import org.devgroup.handbook.entity.PositionEntity;
-import org.devgroup.handbook.exception.MyException;
+import org.devgroup.handbook.exception.EmployeeHandbookException;
 import org.devgroup.handbook.exception.ResponseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 public class EmployeeServiceImpl implements EmployeeService {
 
@@ -30,10 +28,11 @@ public class EmployeeServiceImpl implements EmployeeService {
             PositionEntity position = positionDao.getEntityById(createEmployeeRequest.getIdPosition());
 
             if(department==null){
-                throw new MyException(ResponseException.DEPARTMENT_NOT_EXIST);
+                throw new EmployeeHandbookException(ResponseException.DEPARTMENT_NOT_EXIST);
             }
+
             if(position==null){
-                throw new MyException(ResponseException.POSITION_NOT_EXIST);
+                throw new EmployeeHandbookException(ResponseException.POSITION_NOT_EXIST);
             }
 
 
@@ -55,11 +54,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         } catch (IllegalArgumentException e){
             e.printStackTrace();
             ////////////////////// todo: fix exceptions
-            throw new MyException(ResponseException.FILE_NOT_FOUND);
+            throw new EmployeeHandbookException(ResponseException.FILE_NOT_FOUND);
         } catch (NullPointerException e){ // if dep or pos not exist in db
             e.printStackTrace();
             ///////////////////  todo: fix exceptions
-            throw new MyException(ResponseException.FILE_NOT_FOUND);
+            throw new EmployeeHandbookException(ResponseException.FILE_NOT_FOUND);
         } finally {
         }
     }
@@ -73,9 +72,11 @@ public class EmployeeServiceImpl implements EmployeeService {
             DepartmentEntity department = departmentDao.getEntityById(transferEmployeeRequest.getDepIdTo());
 
             if(employee==null)
-                throw new MyException(ResponseException.EMPLOYEE_NOT_EXIST);
+                throw new EmployeeHandbookException(ResponseException.EMPLOYEE_NOT_EXIST);
             if(department==null)
-                throw  new MyException(ResponseException.DEPARTMENT_NOT_EXIST);
+                throw  new EmployeeHandbookException(ResponseException.DEPARTMENT_NOT_EXIST);
+
+            //todo: проверить не является ли руководителем
 
             employee.setDepartment(department);
             employeeDao.update(employee);
@@ -83,7 +84,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         } catch (NullPointerException e){
             e.printStackTrace();
             ////////////////////   todo: fix exceptions
-            throw new MyException(ResponseException.FILE_NOT_FOUND);
+            throw new EmployeeHandbookException(ResponseException.FILE_NOT_FOUND);
         }
     }
 
@@ -94,11 +95,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         EmployeeEntity employee = employeeDao.getEntityById(changeEmployeeRequest.getEmployeeId());
 
         if(employee==null)
-            throw new MyException(ResponseException.EMPLOYEE_NOT_EXIST);
-
-        Optional.ofNullable(changeEmployeeRequest.getGrade())
-                .ifPresent(employee::setGrade);
-
+            throw new EmployeeHandbookException(ResponseException.EMPLOYEE_NOT_EXIST);
 
         if(changeEmployeeRequest.getGrade()!=null)
             employee.setGrade(changeEmployeeRequest.getGrade());
@@ -109,7 +106,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         if(changeEmployeeRequest.getPositionId()!=null) {
             PositionEntity position = positionDao.getEntityById(changeEmployeeRequest.getPositionId());
             if(position==null)
-                throw new MyException(ResponseException.POSITION_NOT_EXIST);
+                throw new EmployeeHandbookException(ResponseException.POSITION_NOT_EXIST);
+
             employee.setPosition(position);
         }
 
@@ -124,17 +122,16 @@ public class EmployeeServiceImpl implements EmployeeService {
             EmployeeEntity employee = employeeDao.getEntityById(id);
 
             if (employee == null)
-                throw new MyException(ResponseException.EMPLOYEE_NOT_EXIST);
+                throw new EmployeeHandbookException(ResponseException.EMPLOYEE_NOT_EXIST);
 
+            //todo: проверить не является ли руководителем
             employeeDao.delete(employee);
 
             return "Employee was removed successful";
         } catch (NullPointerException e) {
             e.printStackTrace();
             ///////////////// todo fix exc
-            throw new MyException(ResponseException.FILE_NOT_FOUND);
-        } finally {
-            //employeeDao.closeSession();
+            throw new EmployeeHandbookException(ResponseException.FILE_NOT_FOUND);
         }
     }
 

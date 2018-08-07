@@ -17,7 +17,10 @@ import org.springframework.validation.beanvalidation.MethodValidationPostProcess
         //todo: abstract class for all Respons'es
         //todo: Response segregation
         //todo: id in Response for createMethods
-        //todo: 
+        //todo: если удаляем/переводим сотрудникак -> проверить не является ли он руководителем
+        //todo: если мы создаем департамент, но уже есть деп с таким же названием что делать?
+        //todo: если мы удаляем сотрудника и он был руководителем что делать?
+
 
 
 
@@ -27,7 +30,8 @@ public class Main {
     @Bean
     public EmployeeServiceImpl getEmployeeService(){
         return new EmployeeServiceImpl();
-    }  //todo: delete?
+    }
+    //todo: delete?
 
     @Bean
     public LocalValidatorFactoryBean localValidatorFactoryBean() {
