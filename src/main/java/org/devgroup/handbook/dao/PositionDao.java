@@ -45,8 +45,8 @@ public class PositionDao implements EntityDao<PositionEntity,Long> {
     }
 
     @Override
-    public void create(PositionEntity entity) {
-
+    public Long create(PositionEntity entity) {
+        return null;
     }
 
     @Override

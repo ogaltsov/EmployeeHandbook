@@ -14,7 +14,10 @@ import org.springframework.validation.beanvalidation.MethodValidationPostProcess
 @PropertySource({"classpath:application.yml"}) //delete?
 
 
-        //todo: all create operations must return id
+        //todo: abstract class for all Respons'es
+        //todo: Response segregation
+        //todo: id in Response for createMethods
+        //todo: 
 
 
 
@@ -24,17 +27,18 @@ public class Main {
     @Bean
     public EmployeeServiceImpl getEmployeeService(){
         return new EmployeeServiceImpl();
-    }
+    }  //todo: delete?
 
     @Bean
     public LocalValidatorFactoryBean localValidatorFactoryBean() {
         return new LocalValidatorFactoryBean();
-    }
+    }  //todo: delete?
 
     @Bean
     public MethodValidationPostProcessor methodValidationPostProcessor() {
         return new MethodValidationPostProcessor();
-    }
+    }  //todo: delete?
+
 
     public static void main(String[] args) {
         SpringApplication.run(Main.class);

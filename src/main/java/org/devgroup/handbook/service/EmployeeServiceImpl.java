@@ -14,6 +14,8 @@ import org.devgroup.handbook.exception.ResponseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 public class EmployeeServiceImpl implements EmployeeService {
 
     private EmployeeDao employeeDao;
@@ -93,6 +95,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         if(employee==null)
             throw new MyException(ResponseException.EMPLOYEE_NOT_EXIST);
+
+        Optional.ofNullable(changeEmployeeRequest.getGrade())
+                .ifPresent(employee::setGrade);
+
 
         if(changeEmployeeRequest.getGrade()!=null)
             employee.setGrade(changeEmployeeRequest.getGrade());

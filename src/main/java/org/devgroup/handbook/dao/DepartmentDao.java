@@ -48,8 +48,9 @@ public class DepartmentDao implements EntityDao<DepartmentEntity, Long> {
 
     @Override
     @Transactional
-    public void create(DepartmentEntity department) {
+    public Long create(DepartmentEntity department) {
         entityManager.persist(department);
+        return department.getId();
     }
 
     @Override

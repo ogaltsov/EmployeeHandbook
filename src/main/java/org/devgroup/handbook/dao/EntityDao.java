@@ -14,7 +14,7 @@ public interface EntityDao<E, K extends Serializable>  {
 
     void delete(E entity);
 
-    void create(E entity);
+    K create(E entity);
 
     <T> TypedQuery<T> getWithCriteria(CriteriaQuery<T> criteriaQuery);
 }

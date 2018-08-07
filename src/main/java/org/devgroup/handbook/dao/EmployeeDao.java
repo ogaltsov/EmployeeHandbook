@@ -1,6 +1,7 @@
 package org.devgroup.handbook.dao;
 
 import org.devgroup.handbook.entity.EmployeeEntity;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -19,6 +20,8 @@ public class EmployeeDao implements EntityDao<EmployeeEntity, Long> {
     public EmployeeDao(EntityManager entityManager) {
         this.entityManager=entityManager;
     }
+
+
 
     @Override
     public List<EmployeeEntity> getAll() {
@@ -44,8 +47,10 @@ public class EmployeeDao implements EntityDao<EmployeeEntity, Long> {
     }
 
     @Override
-    public void create(EmployeeEntity employee) {
-        entityManager.persist(employee);    }
+    public Long create(EmployeeEntity employee) {
+        entityManager.persist(employee);
+        return employee.getId();
+    }
 
     @Override
     public <T> TypedQuery<T> getWithCriteria(CriteriaQuery<T> criteriaQuery) {
